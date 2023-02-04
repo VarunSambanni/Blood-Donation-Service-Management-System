@@ -74,4 +74,10 @@ router.post('/signupDonor', controllers.postSignupDonor);
 
 router.post('/organisationSignup', verifyJWTAdmin, controllers.postOrganisationSignup);
 
+router.post('/addEvent', verifyJWTOrganisation, controllers.postAddEvent);
+
+router.get('/allEvents', verifyJWTDonor, controllers.getAllEvents);
+
+router.get('/getEventNamesByIds', verifyJWTDonor, controllers.getEventNamesByIds);
+
 module.exports = router; 

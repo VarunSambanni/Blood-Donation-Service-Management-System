@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const Organisation = require('../models/organisations');
 const Donor = require('../models/donors');
+const Event = require('../models/events');
 
 JWT_SECRET_DONOR = 'secret-1';
 JWT_SECRET_ORGANISATION = 'secret-2';
@@ -22,10 +23,10 @@ exports.postLoginDonor = (req, res, next) => {
                 return res.json({ success: false, msg: "Invalid credentials" });
             }
             const token = jwt.sign({}, JWT_SECRET_DONOR, {
-                expiresIn: 3600
+                expiresIn: '1h'
             });
 
-            return res.json({ success: true, msg: "Succesfully logged In", token: token, email: email });
+            return res.json({ success: true, msg: "Succesfully logged In", token: token, email: email, id: data[0][0].donor_id });
         })
         .catch(err => {
             console.log("Error logging in donor ", err);
@@ -37,11 +38,22 @@ exports.postLoginOrganisation = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
     console.log("Request for organisation login : ", email);
-    const token = jwt.sign({}, JWT_SECRET_ORGANISATION, {
-        expiresIn: 3600
-    });
 
-    return res.json({ success: true, msg: "Succesfully logged In", token: token, email: email });
+    Organisation.findByEmailAndPassword(email, password)
+        .then(data => {
+            if (data[0].length === 0) {
+                return res.json({ success: false, msg: "Invalid credentials" });
+            }
+            const name = data[0][0].name;
+            const token = jwt.sign({}, JWT_SECRET_ORGANISATION, {
+                expiresIn: '1h'
+            });
+            return res.json({ success: true, msg: "Succesfully logged In", token: token, email: email, name: name, id: data[0][0].org_id });
+        })
+        .catch(err => {
+            console.log("Error logging in organisation ", err);
+            return res.json({ success: false, msg: "Login Unsuccessful" });
+        })
 }
 
 exports.postLoginAdmin = (req, res, next) => {
@@ -58,10 +70,10 @@ exports.postLoginAdmin = (req, res, next) => {
                 return res.json({ success: false, msg: "Invalid credentials" });
             }
             const token = jwt.sign({}, JWT_SECRET_ADMIN, {
-                expiresIn: 3600
+                expiresIn: '1h'
             });
 
-            return res.json({ success: true, msg: "Succesfully logged In", token: token, email: email });
+            return res.json({ success: true, msg: "Succesfully logged In", token: token, email: email, id: data[0][0].donor_id });
         })
         .catch(err => {
             console.log("Error logging in admin ", err);
@@ -128,8 +140,52 @@ exports.postOrganisationSignup = (req, res, next) => {
                     return res.json({ success: true, msg: "Signed Up Successfully" });
                 })
                 .catch(err => {
-                    console.log("Error signing up ", err)
-                    return res.json({ success: false, msg: "Signup Unsuccessful" })
+                    console.log("Error signing up ", err);
+                    return res.json({ success: false, msg: "Signup Unsuccessful" });
                 })
+        })
+}
+
+exports.postAddEvent = (req, res, next) => {
+    const description = req.body.description;
+    const time = req.body.time;
+    const venue = req.body.venue;
+    const org_id = req.body.org_id;
+
+    const event = new Event(null, description, time, venue, org_id);
+
+    event.save()
+        .then(() => {
+            return res.json({ success: true, msg: "Event Added Successfully" });
+        })
+        .catch(err => {
+            console.log("Error Adding Event ", err);
+            return res.json({ success: false, msg: "Event Could Not Be Added" });
+        })
+}
+
+exports.getEventNamesByIds = (req, res, next) => {
+    Event.getEventNamesByIds()
+        .then(data => {
+            let newData = {};
+            for (let i = 0; i < data[0].length; i++) {
+                newData[data[0][i].event_id] = data[0][i].name;
+            }
+            return res.json({ success: true, data: newData });
+        })
+        .catch(err => {
+            console.log("Error getting event name ", err);
+            return res.json({ success: true, msg: "Error Getting Event Name " });
+        })
+}
+
+exports.getAllEvents = (req, res, next) => {
+    Event.fetchAll()
+        .then(data => {
+            return res.json({ success: true, data: data[0] });
+        })
+        .catch(err => {
+            console.log("Error fetching events ", err);
+            return res.json({ success: false, msg: "Could Not Fetch Events" });
         })
 }

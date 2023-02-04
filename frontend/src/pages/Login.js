@@ -24,6 +24,11 @@ const Login = () => {
                 setIsLoading(false);
                 if (data.success === true) {
                     localStorage.setItem("token", data.token);
+                    localStorage.setItem("email", data.email);
+                    localStorage.setItem("id", data.id);
+                    if (data.name !== null) {
+                        localStorage.setItem("name", data.name);
+                    }
                     window.location.replace(`http://localhost:3000/main${userType}/`);
                 }
                 else {

@@ -65,3 +65,32 @@ a {
 .menuItem:hover {
   background-color: wheat;
 }
+
+.userInfoContainer {
+  border: 1px solid black;
+  width: fit-content;
+  padding: 0.2em;
+  margin: 1em 0em;
+}
+.userInfoLine {
+  margin: 1em 0em;
+}
+
+textArea {
+  width: 100%;
+  resize: none;
+  height: 10em;
+}
+
+.addEventsContainer {
+  width: 20em;
+  border: 1px solid black;
+}
+
+input {
+  width: 100%;
+}
+
+.eventContainer {
+  border: 1px solid black;
+}

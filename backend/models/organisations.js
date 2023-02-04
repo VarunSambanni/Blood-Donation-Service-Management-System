@@ -18,4 +18,8 @@ module.exports = class Organisation {
     static findByEmailOrName(email, name) {
         return db.execute('SELECT * FROM organisations WHERE email = ? OR name = ?', [email, name]);
     }
+
+    static findByEmailAndPassword(email, password) {
+        return db.execute('SELECT * FROM organisations WHERE email = ? AND password = ?', [email, password]);
+    }
 }

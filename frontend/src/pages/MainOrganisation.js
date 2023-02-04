@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import '../index.css';
+import AddEvents from "./AddEvent";
 
 
 const MainOrganisation = () => {
@@ -27,10 +28,25 @@ const MainOrganisation = () => {
 
     return <>
         <div className="mainContainer">
-            Hello Organisation
+            <div className="userInfoContainer">
+                <div className="userInfoLine">
+                    Organisation Email : {localStorage.getItem("email")}
+                </div>
+                <div className="userInfoLine">
+                    Organisation Name : {localStorage.getItem("name")}
+                </div>
+            </div>
+            <div className="menu">
+                <a href='/mainOrganisation/addEvents' className="menuItem">Add Event </a>
+                <a href='/mainOrganisation/bloodDonation' className="menuItem">Blood Donation</a>
+            </div>
             <Router>
                 <Switch>
-                    <Route exact path='/mainOrganisation/'>
+
+                    <Route exact path='/mainOrganisation/addEvents'>
+                        <AddEvents />
+                    </Route>
+                    <Route exact path='/mainOrganisation/bloodDonation'>
                     </Route>
                 </Switch>
             </Router>
