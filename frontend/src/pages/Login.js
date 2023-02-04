@@ -10,6 +10,7 @@ const Login = () => {
 
     const loginHandler = () => {
         setIsLoading(true);
+        console.log(userType);
         fetch(`http://localhost:5000/login${userType}`, {
             method: "POST",
             headers: {
@@ -27,7 +28,11 @@ const Login = () => {
                 }
                 else {
                     console.log("Error logging in");
+                    window.alert(data.msg);
                 }
+            })
+            .catch(err => {
+                window.alert("Error connecting to server");
             })
         setIsLoading(false);
     }
@@ -50,6 +55,7 @@ const Login = () => {
                     <select onChange={(e) => setUserType(e.target.value)} value={userType}>
                         <option value={"Donor"}>Donor</option>
                         <option value={"Organisation"}>Organisation</option>
+                        <option value={"Admin"}>Admin</option>
                     </select>
                 </div>
                 <div className="center">

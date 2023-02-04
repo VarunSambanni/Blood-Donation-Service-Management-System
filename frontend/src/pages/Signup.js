@@ -3,6 +3,7 @@ import '../index.css';
 
 const Signup = () => {
 
+    const [isLoading, setIsLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -10,7 +11,31 @@ const Signup = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
 
     const signupHandler = () => {
-
+        setIsLoading(true);
+        fetch(`http://localhost:5000/signupDonor`, {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: email, password: password, confirmPassword: confirmPassword, phone_no: phoneNumber, blood_type: bloodType })
+        })
+            .then(res => res.json())
+            .then(data => {
+                setIsLoading(false);
+                if (data.success === true) {
+                    localStorage.setItem("token", data.token);
+                    window.location.replace(`http://localhost:3000/`);
+                }
+                else {
+                    console.log("Error signing up");
+                    window.alert(data.msg);
+                }
+            })
+            .catch(err => {
+                window.alert("Error connecting to server");
+            })
+        setIsLoading(false);
     }
 
 

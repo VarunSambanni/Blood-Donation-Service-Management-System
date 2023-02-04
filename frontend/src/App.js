@@ -5,6 +5,7 @@ import Signup from './pages/Signup';
 import Header from './components/Header';
 import MainDonor from './pages/MainDonor';
 import MainOrganisation from './pages/MainOrganisation';
+import MainAdmin from './pages/MainAdmin';
 
 function App() {
   return (
@@ -23,6 +24,9 @@ function App() {
           </Route>
           <Route path='/mainOrganisation'>
             <MainOrganisation />
+          </Route>
+          <Route path='/mainAdmin'>
+            <MainAdmin />
           </Route>
         </Switch>
       </Router>
