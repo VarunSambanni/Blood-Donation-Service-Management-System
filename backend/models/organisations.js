@@ -1,15 +1,21 @@
 const db = require('../util/database');
 
 module.exports = class Organisation {
-    constructor(id, name, size) {
+    constructor(id, email, password, name, size) {
         this.id = id;
+        this.email = email;
+        this.password = password;
         this.name = name;
         this.size = size;
     }
 
     save() {
         return db.execute(
-            'INSERT INTO organisations VALUES (?, ?)', [this.name, this.size]
+            'INSERT INTO organisations(email, password, name, size) VALUES (?, ?, ?, ?)', [this.email, this.password, this.name, this.size]
         );
+    }
+
+    static findByEmailOrName(email, name) {
+        return db.execute('SELECT * FROM organisations WHERE email = ? OR name = ?', [email, name]);
     }
 }

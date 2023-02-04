@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import '../index.css';
-import Events from '../pages/Events';
+import OrganisationSignup from '../pages/OrganisationSignup';
+
 
 const MainAdmin = () => {
 
@@ -28,13 +29,21 @@ const MainAdmin = () => {
     return <>
         <div className="mainContainer">
             Hello Admin
+            <div className="menu">
+                <a href='/mainAdmin/organisationSignup' className="menuItem">Organisation Signup </a>
+                <a href='/mainAdmin/bloodReception' className="menuItem">Blood Reception</a>
+            </div>
             <Router>
                 <Switch>
                     <Route exact path='/mainAdmin/'>
-                        <Events></Events>
+
+                    </Route>
+                    <Route exact path='/mainAdmin/organisationSignup'>
+                        <OrganisationSignup />
                     </Route>
                 </Switch>
             </Router>
+
         </div>
     </>
 }

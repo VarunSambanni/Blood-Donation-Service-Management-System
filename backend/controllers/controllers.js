@@ -22,7 +22,7 @@ exports.postLoginDonor = (req, res, next) => {
                 return res.json({ success: false, msg: "Invalid credentials" });
             }
             const token = jwt.sign({}, JWT_SECRET_DONOR, {
-                expiresIn: 900
+                expiresIn: 3600
             });
 
             return res.json({ success: true, msg: "Succesfully logged In", token: token, email: email });
@@ -38,7 +38,7 @@ exports.postLoginOrganisation = (req, res, next) => {
     const password = req.body.password;
     console.log("Request for organisation login : ", email);
     const token = jwt.sign({}, JWT_SECRET_ORGANISATION, {
-        expiresIn: 900
+        expiresIn: 3600
     });
 
     return res.json({ success: true, msg: "Succesfully logged In", token: token, email: email });
@@ -58,7 +58,7 @@ exports.postLoginAdmin = (req, res, next) => {
                 return res.json({ success: false, msg: "Invalid credentials" });
             }
             const token = jwt.sign({}, JWT_SECRET_ADMIN, {
-                expiresIn: 900
+                expiresIn: 3600
             });
 
             return res.json({ success: true, msg: "Succesfully logged In", token: token, email: email });
@@ -83,12 +83,47 @@ exports.postSignupDonor = (req, res, next) => {
     const phone_no = req.body.phone_no;
     const blood_type = req.body.blood_type;
     const donor = new Donor(null, email, password, phone_no, blood_type);
+
+    if (password !== confirmPassword) {
+        return res.json({ success: false, msg: "Passwords don't match" });
+    }
+
     Donor.findByEmail(email)
         .then(data => {
             if (data[0].length !== 0) {
                 return res.json({ success: false, msg: "Donor already exists" });
             }
             donor.save()
+                .then(() => {
+                    return res.json({ success: true, msg: "Signed Up Successfully" });
+                })
+                .catch(err => {
+                    console.log("Error signing up ", err)
+                    return res.json({ success: false, msg: "Signup Unsuccessful" })
+                })
+        })
+}
+
+exports.postOrganisationSignup = (req, res, next) => {
+    console.log("Signing up Organisation : ", req.body.email);
+    const email = req.body.email;
+    const password = req.body.password;
+    const confirmPassword = req.body.confirmPassword;
+    const name = req.body.name;
+    const size = req.body.size;
+    const organisation = new Organisation(null, email, password, name, size);
+    console.log("Here ", req.body)
+
+    if (password !== confirmPassword) {
+        return res.json({ success: false, msg: "Passwords don't match" });
+    }
+
+    Organisation.findByEmailOrName(email, name)
+        .then(data => {
+            if (data[0].length !== 0) {
+                return res.json({ success: false, msg: "Organisation already exists" });
+            }
+            organisation.save()
                 .then(() => {
                     return res.json({ success: true, msg: "Signed Up Successfully" });
                 })

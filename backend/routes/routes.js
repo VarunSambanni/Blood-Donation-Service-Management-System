@@ -72,4 +72,6 @@ router.get('/checkAuthAdmin', verifyJWTAdmin, controllers.getCheckAuth);
 
 router.post('/signupDonor', controllers.postSignupDonor);
 
+router.post('/organisationSignup', verifyJWTAdmin, controllers.postOrganisationSignup);
+
 module.exports = router; 

@@ -43,3 +43,25 @@ select {
   display: flex;
   flex-direction: row;
 }
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  margin: 1em auto;
+}
+
+.menuItem {
+  background-color: beige;
+  padding: 1em;
+  border: 1px solid black;
+}
+
+.menuItem:hover {
+  background-color: wheat;
+}

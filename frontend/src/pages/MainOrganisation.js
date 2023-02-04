@@ -18,7 +18,7 @@ const MainOrganisation = () => {
                     console.log('Unauthenticated Organisation');
                     window.location.replace('http://localhost:3000/');
                 }
-                console.log("Authentictaed Organisation");
+                console.log("Authenticated Organisation");
             })
             .catch(err => {
                 console.log("Error connecting to server from mainOrganisation");
