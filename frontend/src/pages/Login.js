@@ -10,7 +10,7 @@ const Login = () => {
 
     const loginHandler = () => {
         setIsLoading(true);
-        fetch('http://localhost:5000/login', {
+        fetch(`http://localhost:5000/login${userType}`, {
             method: "POST",
             headers: {
                 'Accept': 'application/json',
@@ -23,7 +23,7 @@ const Login = () => {
                 setIsLoading(false);
                 if (data.success === true) {
                     localStorage.setItem("token", data.token);
-                    window.location.replace('http://localhost:3000/mainDonor/');
+                    window.location.replace(`http://localhost:3000/main${userType}/`);
                 }
                 else {
                     console.log("Error logging in");

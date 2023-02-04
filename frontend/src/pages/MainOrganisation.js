@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import '../index.css';
-import Events from '../pages/Events';
 
-const MainDonor = () => {
 
+const MainOrganisation = () => {
+    console.log("main organisation");
     useEffect(() => {
-        fetch('http://localhost:5000/checkAuthDonor', {
+        fetch('http://localhost:5000/checkAuthOrganisation', {
             method: "GET",
             headers: {
                 'x-access-token': localStorage.getItem('token')
@@ -15,23 +15,22 @@ const MainDonor = () => {
             .then(res => res.json())
             .then(data => {
                 if (data.success === false) {
-                    console.log('Unauthenticated Donor');
+                    console.log('Unauthenticated Organisation');
                     window.location.replace('http://localhost:3000/');
                 }
-                console.log("Authenticated Donor");
+                console.log("Authentictaed Organisation");
             })
             .catch(err => {
-                console.log("Error connecting to server from mainDonor");
+                console.log("Error connecting to server from mainOrganisation");
             })
     }, []);
 
     return <>
         <div className="mainContainer">
-            Hello Donor
+            Hello Organisation
             <Router>
                 <Switch>
-                    <Route exact path='/mainDonor/'>
-                        <Events></Events>
+                    <Route exact path='/mainOrganisation/'>
                     </Route>
                 </Switch>
             </Router>
@@ -39,4 +38,4 @@ const MainDonor = () => {
     </>
 }
 
-export default MainDonor;
+export default MainOrganisation;

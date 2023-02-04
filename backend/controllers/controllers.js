@@ -8,15 +8,26 @@ exports.getHome = (req, res, next) => {
     return res.json({ success: true, msg: "Hello" });
 }
 
-exports.postLogin = (req, res, next) => {
+exports.postLoginDonor = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
-    console.log("Request for login : ", email);
+    console.log("Request for donor login : ", email);
     const token = jwt.sign({}, JWT_SECRET_DONOR, {
         expiresIn: 900
     });
 
-    return res.json({ success: true, msg: "Succesfully logged In", token: token, email: "email@email.com" });
+    return res.json({ success: true, msg: "Succesfully logged In", token: token, email: email });
+}
+
+exports.postLoginOrganisation = (req, res, next) => {
+    const email = req.body.email;
+    const password = req.body.password;
+    console.log("Request for organisation login : ", email);
+    const token = jwt.sign({}, JWT_SECRET_ORGANISATION, {
+        expiresIn: 900
+    });
+
+    return res.json({ success: true, msg: "Succesfully logged In", token: token, email: email });
 }
 
 exports.getCheckAuth = (req, res, next) => {

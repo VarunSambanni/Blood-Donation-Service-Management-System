@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Header from './components/Header';
 import MainDonor from './pages/MainDonor';
+import MainOrganisation from './pages/MainOrganisation';
 
 function App() {
   return (
@@ -19,6 +20,9 @@ function App() {
           </Route>
           <Route path='/mainDonor'>
             <MainDonor />
+          </Route>
+          <Route path='/mainOrganisation'>
+            <MainOrganisation />
           </Route>
         </Switch>
       </Router>

@@ -7,7 +7,7 @@ const controllers = require('../controllers/controllers');
 JWT_SECRET_DONOR = 'secret-1';
 JWT_SECRET_ORGANISATION = 'secret-2';
 
-const verifyJWT = (req, res, next) => {
+const verifyJWTDonor = (req, res, next) => {
     const token = req.headers['x-access-token'];
     if (!token) {
         return res.json({ success: false, msg: "Token needed" });
@@ -23,11 +23,29 @@ const verifyJWT = (req, res, next) => {
     }
 }
 
+const verifyJWTOrganisation = (req, res, next) => {
+    const token = req.headers['x-access-token'];
+    if (!token) {
+        return res.json({ success: false, msg: "Token needed" });
+    }
+    else {
+        jwt.verify(token, JWT_SECRET_ORGANISATION, (err, decoded) => {
+            if (err) {
+                return res.json({ success: false, msg: "Failed to Authenticate" });
+            }
+            req.userId = decoded.id;
+            next();
+        })
+    }
+}
+
 router.get('/', controllers.getHome);
 
-router.post('/login', controllers.postLogin);
+router.post('/loginDonor', controllers.postLoginDonor);
 
-router.get('/checkAuth', verifyJWT, controllers.getCheckAuth); // Just to check if user is auth 
+router.post('/loginOrganisation', controllers.postLoginOrganisation);
 
+router.get('/checkAuthDonor', verifyJWTDonor, controllers.getCheckAuth); // Just to check if user is auth 
 
+router.get('/checkAuthOrganisation', verifyJWTOrganisation, controllers.getCheckAuth);
 module.exports = router; 
