@@ -3,10 +3,20 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import '../index.css';
 import AddEvents from "./AddEvent";
 import Logout from "../components/Logout";
-
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const MainOrganisation = () => {
     console.log("main organisation");
+    const [isLoading, setIsLoading] = useState(false);
+
+    const [events, setEvents] = useState([]);
+    const [idRegistrationsMap, setIdRegistrationsMap] = useState({});
+
+
     useEffect(() => {
         fetch('http://localhost:5000/checkAuthOrganisation', {
             method: "GET",
@@ -27,8 +37,63 @@ const MainOrganisation = () => {
             })
     }, []);
 
+    useEffect(() => {
+        fetch('http://localhost:5000/getAllEventsByOrganisation', {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': localStorage.getItem('token')
+            },
+            body: JSON.stringify({ org_id: localStorage.getItem('id') })
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success === false) {
+                    window.alert(data.msg);
+                }
+                console.log("Events ", data.data);
+                data.data.reverse();
+                setEvents(data.data);
+            })
+            .catch(err => {
+                console.log("Error connecting to server from mainOrganisation");
+            })
+    }, []);
+
+    useEffect(() => {
+        fetch('http://localhost:5000/getRegistrationsByIds', {
+            method: "GET",
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success === false) {
+                    window.alert(data.msg);
+                }
+                else {
+                    console.log("Map ", data.data);
+                    localStorage.setItem("idRegistrationsMap", JSON.stringify(data.data));
+                    let viewsFlag = {};
+                    for (const [key, value] of Object.entries(data.data)) {
+                        viewsFlag[key] = false;
+                    }
+                    localStorage.setItem("viewsFlag", JSON.stringify(viewsFlag));
+                    setIdRegistrationsMap(data.data);
+                    console.log("Map ", idRegistrationsMap);
+                }
+            })
+            .catch(err => {
+                console.log("Error connecting to server from mainDonor");
+            })
+    }, []);
+
+
     return <>
         <div className="mainContainer">
+            {isLoading && <div>Loading...</div>}
             <div className="loggedInBar">
                 <div className="loggedInInfo">
                     Logged In As : {localStorage.getItem("email")}
@@ -51,6 +116,61 @@ const MainOrganisation = () => {
                     </Route>
                 </Switch>
             </Router>
+            <div className="eventsContainer">
+                <div className="center">
+                    LIST OF EVENTS ORGANISED
+                </div>
+                {
+                    events.map((event, idx) => {
+                        return <div className="eventContainer">
+                            <div className="" key={idx} onClick={{}}>
+                                <p>{event.description}</p>
+                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <div>
+                                        <p>Time : {event.time}</p>
+                                        <p>Venue : {event.venue}</p>
+                                    </div>
+
+                                </div>
+                                <hr />
+                            </div>
+                            <Accordion sx={{ backgroundColor: '#f7fcfc', border: '1px solid black' }}>
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel1a-content"
+                                    id="panel1a-header"
+                                >
+                                    View Registrations
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <div className="center">
+                                        {localStorage.getItem("idRegistrationsMap") &&
+                                            <table>
+                                                <tr>
+                                                    <th>Email</th>
+                                                    <th>Phone No</th>
+                                                    <th>Blood Type</th>
+                                                </tr>
+                                                {JSON.parse(localStorage.getItem("idRegistrationsMap")) !== null
+                                                    && (event.event_id in JSON.parse(localStorage.getItem("idRegistrationsMap"))) === true
+                                                    && JSON.parse(localStorage.getItem("idRegistrationsMap"))[event.event_id].length > 0
+                                                    && JSON.parse(localStorage.getItem("idRegistrationsMap"))[event.event_id].map((reg, index) => {
+                                                        return <tr key={index}>
+                                                            <td>{reg.email}</td>
+                                                            <td>{reg.phone_no}</td>
+                                                            <td>{reg.blood_type}</td>
+                                                        </tr>
+                                                    })
+                                                }
+                                            </table>
+                                        }
+                                    </div>
+                                </AccordionDetails>
+                            </Accordion>
+                        </div>
+                    })
+                }
+            </div>
         </div>
     </>
 }

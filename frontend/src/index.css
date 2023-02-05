@@ -133,3 +133,16 @@ input {
   padding: 0.6em;
   border: 1px solid black;
 }
+
+.organisationEvent {
+}
+
+table,
+th,
+td {
+  border: 1px solid black;
+  text-align: center;
+}
+table {
+  width: 75%;
+}

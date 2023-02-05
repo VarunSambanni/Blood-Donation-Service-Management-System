@@ -21,9 +21,16 @@ module.exports = class Event {
         );
     }
 
+    static getEventsByOrgId(org_id) {
+        return db.execute(
+            'SELECT * from events WHERE org_id = ?', [org_id]
+        );
+    }
+
     static fetchAll() {
         return db.execute(
             'SELECT * FROM events'
         )
     }
+
 }

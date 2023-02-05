@@ -82,4 +82,8 @@ router.get('/getEventNamesByIds', verifyJWTDonor, controllers.getEventNamesByIds
 
 router.post('/registerEvent', verifyJWTDonor, controllers.postRegisterEvent);
 
+router.post('/getAllEventsByOrganisation', verifyJWTOrganisation, controllers.getAllEventsByOrganisation);
+
+router.get('/getRegistrationsByIds', verifyJWTOrganisation, controllers.getRegistrationsByIds);
+
 module.exports = router; 

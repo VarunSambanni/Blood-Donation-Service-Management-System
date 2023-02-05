@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const Organisation = require('../models/organisations');
 const Donor = require('../models/donors');
 const Event = require('../models/events');
+const Registration = require('../models/registrations');
 
 JWT_SECRET_DONOR = 'secret-1';
 JWT_SECRET_ORGANISATION = 'secret-2';
@@ -194,5 +195,49 @@ exports.postRegisterEvent = (req, res, next) => {
     const donor_id = req.body.donor_id;
     const event_id = req.body.event_id;
     console.log(Number(donor_id), " registering for event ", event_id);
-    return res.json({ success: true, msg: "Event registration successful" });
+    const registartion = new Registration(donor_id, event_id);
+    registartion.save()
+        .then(() => {
+            return res.json({ success: true, msg: "Event registration successful" });
+        })
+        .catch(err => {
+            console.log("Error registering ", err);
+            return res.json({ success: false, msg: "Error Registering" });
+        })
+}
+
+exports.getAllEventsByOrganisation = (req, res, next) => {
+    const org_id = req.body.org_id;
+    Event.getEventsByOrgId(org_id)
+        .then(data => {
+            return res.json({ success: true, data: data[0] });
+        })
+        .catch(err => {
+            console.log("Error fetching events for the organisation ", err);
+            return res.json({ success: false, msg: "Error Fetching Events For The Organisation" });
+        })
+
+}
+
+exports.getRegistrationsByIds = (req, res, next) => {
+
+    Registration.getRegistrationsByIds()
+        .then(data => {
+            let newData = {};
+            for (let i = 0; i < data[0].length; i++) {
+                if (data[0][i].event_id in newData === false) {
+                    newData[data[0][i].event_id] = [{ email: data[0][i].email, phone_no: data[0][i].phone_no, blood_type: data[0][i].blood_type }];
+                }
+                else {
+                    newData[data[0][i].event_id].push({ email: data[0][i].email, phone_no: data[0][i].phone_no, blood_type: data[0][i].blood_type });
+                }
+            }
+            console.log(newData);
+            return res.json({ success: true, data: newData });
+        })
+        .catch(err => {
+            console.log("Error fetching registered users ", err);
+            return res.json({ success: false, msg: "Error fetching registered users" });
+        })
+
 }

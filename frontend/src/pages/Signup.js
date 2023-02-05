@@ -7,7 +7,7 @@ const Signup = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [bloodType, setBloodType] = useState('O+ve');
+    const [bloodType, setBloodType] = useState('O+');
     const [phoneNumber, setPhoneNumber] = useState('');
 
     const signupHandler = () => {

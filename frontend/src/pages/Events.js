@@ -89,7 +89,7 @@ const Events = () => {
             {isLoading && <div>Loading...</div>}
             <div className="eventsContainer">
                 {events.map((event, idx) => {
-                    return <div className="eventContainer">
+                    return <div className="eventContainer" key={idx}>
                         <div className="organiserNameContainer">
                             <p className="organiserName">Organisor : {idNameMap[event.event_id]}</p>
                         </div>
