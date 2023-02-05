@@ -189,3 +189,10 @@ exports.getAllEvents = (req, res, next) => {
             return res.json({ success: false, msg: "Could Not Fetch Events" });
         })
 }
+
+exports.postRegisterEvent = (req, res, next) => {
+    const donor_id = req.body.donor_id;
+    const event_id = req.body.event_id;
+    console.log(Number(donor_id), " registering for event ", event_id);
+    return res.json({ success: true, msg: "Event registration successful" });
+}

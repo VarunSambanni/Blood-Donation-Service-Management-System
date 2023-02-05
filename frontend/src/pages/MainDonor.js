@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import '../index.css';
 import Events from '../pages/Events';
+import Logout from "../components/Logout";
 
 const MainDonor = () => {
 
@@ -28,7 +29,12 @@ const MainDonor = () => {
 
     return <>
         <div className="mainContainer">
-            Hello Donor
+            <div className="loggedInBar">
+                <div className="loggedInInfo">
+                    Logged In As : {localStorage.getItem("email")}
+                </div>
+                <Logout />
+            </div>
             <Router>
                 <Switch>
                     <Route exact path='/mainDonor/'>

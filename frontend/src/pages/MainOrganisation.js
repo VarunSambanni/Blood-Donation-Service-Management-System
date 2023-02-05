@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import '../index.css';
 import AddEvents from "./AddEvent";
+import Logout from "../components/Logout";
 
 
 const MainOrganisation = () => {
@@ -28,13 +29,13 @@ const MainOrganisation = () => {
 
     return <>
         <div className="mainContainer">
-            <div className="userInfoContainer">
-                <div className="userInfoLine">
-                    Organisation Email : {localStorage.getItem("email")}
-                </div>
-                <div className="userInfoLine">
+            <div className="loggedInBar">
+                <div className="loggedInInfo">
+                    Logged In As : {localStorage.getItem("email")}
+                    <br />
                     Organisation Name : {localStorage.getItem("name")}
                 </div>
+                <Logout />
             </div>
             <div className="menu">
                 <a href='/mainOrganisation/addEvents' className="menuItem">Add Event </a>

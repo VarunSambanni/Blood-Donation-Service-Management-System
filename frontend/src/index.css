@@ -1,3 +1,7 @@
+* {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .App {
   border: 1px solid black;
 }
@@ -27,7 +31,17 @@
 
 button {
   padding: 0.4em;
-  margin: 1em;
+  height: 2.4em;
+  background-color: rgb(17, 112, 255);
+  color: white;
+  border-radius: 0.2em;
+  margin: 0.6em 0em;
+  transition: all 0.4s;
+}
+
+button:hover {
+  background-color: rgb(212, 234, 255);
+  color: black;
 }
 
 button:hover {
@@ -92,5 +106,30 @@ input {
 }
 
 .eventContainer {
+  border: 1px solid black;
+  padding: 0.6em;
+}
+
+.organiserNameContainer {
+  border: 1px solid black;
+  max-width: 14em;
+  overflow-x: auto;
+  padding: 0em 1em;
+  background-color: rgb(193, 226, 255);
+}
+
+.organiserName {
+}
+
+.loggedInBar {
+  background-color: rgb(226, 244, 255);
+  padding: 0.3em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.loggedInInfo {
+  padding: 0.6em;
   border: 1px solid black;
 }
