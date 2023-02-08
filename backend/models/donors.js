@@ -9,6 +9,10 @@ module.exports = class Donor {
         this.blood_type = blood_type;
     }
 
+    static fetchAll() {
+        return db.execute('SELECT donor_id, email, phone_no, blood_type from donors');
+    }
+
     static findByEmailAndPassword(email, password) {
         return db.execute('SELECT * FROM donors WHERE email = ? AND password = ? ', [email, password]);
     }

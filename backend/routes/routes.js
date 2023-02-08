@@ -86,4 +86,6 @@ router.post('/getAllEventsByOrganisation', verifyJWTOrganisation, controllers.ge
 
 router.get('/getRegistrationsByIds', verifyJWTOrganisation, controllers.getRegistrationsByIds);
 
+router.get('/getDonorsList', verifyJWTAdmin, controllers.getDonorsList);
+
 module.exports = router; 

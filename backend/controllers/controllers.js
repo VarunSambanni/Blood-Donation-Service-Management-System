@@ -239,5 +239,15 @@ exports.getRegistrationsByIds = (req, res, next) => {
             console.log("Error fetching registered users ", err);
             return res.json({ success: false, msg: "Error fetching registered users" });
         })
+}
 
+
+exports.getDonorsList = (req, res, next) => {
+    Donor.fetchAll()
+        .then(data => {
+            return res.json({ success: true, data: data[0] });
+        })
+        .catch(err => {
+            return res.json({ success: false, msg: "Error fetching donors list" });
+        })
 }

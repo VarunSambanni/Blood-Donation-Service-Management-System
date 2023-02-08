@@ -10,9 +10,11 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const MainOrganisation = () => {
-    console.log("main organisation");
-    const [isLoading, setIsLoading] = useState(false);
 
+    if (localStorage.getItem("menuSelected") === null)
+        localStorage.setItem("menuSelected", true);
+
+    const [isLoading, setIsLoading] = useState(false);
     const [events, setEvents] = useState([]);
     const [idRegistrationsMap, setIdRegistrationsMap] = useState({});
 
@@ -100,77 +102,89 @@ const MainOrganisation = () => {
                     <br />
                     Organisation Name : {localStorage.getItem("name")}
                 </div>
-                <Logout />
-            </div>
-            <div className="menu">
-                <a href='/mainOrganisation/addEvents' className="menuItem">Add Event </a>
-                <a href='/mainOrganisation/bloodDonation' className="menuItem">Blood Donation</a>
-            </div>
-            <Router>
-                <Switch>
-
-                    <Route exact path='/mainOrganisation/addEvents'>
-                        <AddEvents />
-                    </Route>
-                    <Route exact path='/mainOrganisation/bloodDonation'>
-                    </Route>
-                </Switch>
-            </Router>
-            <div className="eventsContainer">
-                <div className="center">
-                    LIST OF EVENTS ORGANISED
+                <div className="adminButtonsContainer">
+                    <button style={{ marginRight: '0.4em' }} onClick={() => {
+                        localStorage.setItem("menuSelected", true);
+                        window.location.replace('http://localhost:3000/mainOrganisation/');
+                    }}>Home</button>
+                    <Logout />
                 </div>
-                {
-                    events.map((event, idx) => {
-                        return <div className="eventContainer">
-                            <div className="" key={idx} onClick={{}}>
-                                <p>{event.description}</p>
-                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <div>
-                                        <p>Time : {event.time}</p>
-                                        <p>Venue : {event.venue}</p>
-                                    </div>
-
-                                </div>
-                                <hr />
-                            </div>
-                            <Accordion sx={{ backgroundColor: '#f7fcfc', border: '1px solid black' }}>
-                                <AccordionSummary
-                                    expandIcon={<ExpandMoreIcon />}
-                                    aria-controls="panel1a-content"
-                                    id="panel1a-header"
-                                >
-                                    View Registrations
-                                </AccordionSummary>
-                                <AccordionDetails>
-                                    <div className="center">
-                                        {localStorage.getItem("idRegistrationsMap") &&
-                                            <table>
-                                                <tr>
-                                                    <th>Email</th>
-                                                    <th>Phone No</th>
-                                                    <th>Blood Type</th>
-                                                </tr>
-                                                {JSON.parse(localStorage.getItem("idRegistrationsMap")) !== null
-                                                    && (event.event_id in JSON.parse(localStorage.getItem("idRegistrationsMap"))) === true
-                                                    && JSON.parse(localStorage.getItem("idRegistrationsMap"))[event.event_id].length > 0
-                                                    && JSON.parse(localStorage.getItem("idRegistrationsMap"))[event.event_id].map((reg, index) => {
-                                                        return <tr key={index}>
-                                                            <td>{reg.email}</td>
-                                                            <td>{reg.phone_no}</td>
-                                                            <td>{reg.blood_type}</td>
-                                                        </tr>
-                                                    })
-                                                }
-                                            </table>
-                                        }
-                                    </div>
-                                </AccordionDetails>
-                            </Accordion>
-                        </div>
-                    })
-                }
             </div>
+            {
+                JSON.parse(localStorage.getItem("menuSelected")) === true &&
+                <div className="menu">
+                    <a href='/mainOrganisation/addEvents' onClick={() => { localStorage.setItem("menuSelected", false) }} className="menuItem">Add Event </a>
+                    <a href='/mainOrganisation/bloodDonation' onClick={() => { localStorage.setItem("menuSelected", false) }} className="menuItem">Blood Donation</a>
+                </div>
+            }
+            {JSON.parse(localStorage.getItem("menuSelected")) === false &&
+                <Router>
+                    <Switch>
+                        <Route exact path='/mainOrganisation/addEvents'>
+                            <AddEvents />
+                        </Route>
+                        <Route exact path='/mainOrganisation/bloodDonation'>
+                        </Route>
+                    </Switch>
+                </Router>
+            }
+            {JSON.parse(localStorage.getItem("menuSelected")) === true &&
+                <div className="eventsContainer">
+                    <div className="center">
+                        LIST OF EVENTS ORGANISED
+                    </div>
+                    {
+                        events.map((event, idx) => {
+                            return <div className="eventContainer">
+                                <div className="" key={idx} onClick={{}}>
+                                    <p>{event.description}</p>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                        <div>
+                                            <p>Time : {event.time}</p>
+                                            <p>Venue : {event.venue}</p>
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                </div>
+                                <Accordion sx={{ backgroundColor: '#f7fcfc', border: '1px solid black' }}>
+                                    <AccordionSummary
+                                        expandIcon={<ExpandMoreIcon />}
+                                        aria-controls="panel1a-content"
+                                        id="panel1a-header"
+                                    >
+                                        View Registrations
+                                    </AccordionSummary>
+                                    <AccordionDetails>
+                                        <div className="center">
+                                            {localStorage.getItem("idRegistrationsMap") &&
+                                                <table>
+                                                    <tr>
+                                                        <th>Email</th>
+                                                        <th>Phone No</th>
+                                                        <th>Blood Type</th>
+                                                    </tr>
+                                                    {JSON.parse(localStorage.getItem("idRegistrationsMap")) !== null
+                                                        && (event.event_id in JSON.parse(localStorage.getItem("idRegistrationsMap"))) === true
+                                                        && JSON.parse(localStorage.getItem("idRegistrationsMap"))[event.event_id].length > 0
+                                                        && JSON.parse(localStorage.getItem("idRegistrationsMap"))[event.event_id].map((reg, index) => {
+                                                            return <tr key={index}>
+                                                                <td>{reg.email}</td>
+                                                                <td>{reg.phone_no}</td>
+                                                                <td>{reg.blood_type}</td>
+                                                            </tr>
+                                                        })
+                                                    }
+                                                </table>
+                                            }
+                                        </div>
+                                    </AccordionDetails>
+                                </Accordion>
+                            </div>
+                        })
+                    }
+                </div>
+            }
         </div>
     </>
 }
