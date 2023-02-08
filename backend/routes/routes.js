@@ -88,4 +88,6 @@ router.get('/getRegistrationsByIds', verifyJWTOrganisation, controllers.getRegis
 
 router.get('/getDonorsList', verifyJWTAdmin, controllers.getDonorsList);
 
+router.get('/getOrganisersList', verifyJWTAdmin, controllers.getOrganisersList);
+
 module.exports = router; 

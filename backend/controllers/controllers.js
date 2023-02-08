@@ -251,3 +251,13 @@ exports.getDonorsList = (req, res, next) => {
             return res.json({ success: false, msg: "Error fetching donors list" });
         })
 }
+
+exports.getOrganisersList = (req, res, next) => {
+    Organisation.fetchAll()
+        .then(data => {
+            return res.json({ success: true, data: data[0] });
+        })
+        .catch(err => {
+            return res.json({ success: false, msg: "Error fetching donors list" });
+        })
+}

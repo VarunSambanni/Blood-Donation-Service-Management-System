@@ -5,6 +5,7 @@ import OrganisationSignup from '../pages/OrganisationSignup';
 import Logout from "../components/Logout";
 import BloodReception from "./BloodReception";
 import DonorsList from "./DonorsList";
+import OrganisersList from "./OrganisationsList";
 
 const MainAdmin = () => {
 
@@ -51,6 +52,7 @@ const MainAdmin = () => {
                         <a href='/mainAdmin/organisationSignup' onClick={() => localStorage.setItem("menuSelected", false)} className="menuItem">Organisation Signup </a>
                         <a href='/mainAdmin/bloodReception' onClick={() => localStorage.setItem("menuSelected", false)} className="menuItem">Blood Reception</a>
                         <a href='/mainAdmin/donorsList' onClick={() => localStorage.setItem("menuSelected", false)} className="menuItem">Donors List</a>
+                        <a href='/mainAdmin/organisersList' onClick={() => localStorage.setItem("menuSelected", false)} className="menuItem">Organisers List</a>
                     </div>
                     :
                     <Router>
@@ -63,6 +65,9 @@ const MainAdmin = () => {
                             </Route>
                             <Route exact path='/mainAdmin/donorsList'>
                                 <DonorsList />
+                            </Route>
+                            <Route exact path='/mainAdmin/organisersList'>
+                                <OrganisersList />
                             </Route>
                         </Switch>
                     </Router>

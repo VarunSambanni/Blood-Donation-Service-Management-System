@@ -15,6 +15,10 @@ module.exports = class Organisation {
         );
     }
 
+    static fetchAll() {
+        return db.execute('SELECT org_id, email, name, size FROM organisations');
+    }
+
     static findByEmailOrName(email, name) {
         return db.execute('SELECT * FROM organisations WHERE email = ? OR name = ?', [email, name]);
     }
