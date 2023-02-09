@@ -99,7 +99,7 @@ const Events = () => {
                                 <p>Time : {event.time}</p>
                                 <p>Venue : {event.venue}</p>
                             </div>
-                            <button onClick={() => registerHandler(event.event_id)}>Register</button>
+                            <button style={{ marginRight: '0.4em' }} onClick={() => registerHandler(event.event_id)}>Register</button>
                         </div>
                     </div>
                 })}

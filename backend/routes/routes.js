@@ -80,6 +80,8 @@ router.get('/allEvents', verifyJWTDonor, controllers.getAllEvents);
 
 router.get('/getEventNamesByIds', verifyJWTDonor, controllers.getEventNamesByIds);
 
+router.get('/getEventNamesByIds-Admin', verifyJWTAdmin, controllers.getEventNamesByIds);
+
 router.post('/registerEvent', verifyJWTDonor, controllers.postRegisterEvent);
 
 router.post('/getAllEventsByOrganisation', verifyJWTOrganisation, controllers.getAllEventsByOrganisation);

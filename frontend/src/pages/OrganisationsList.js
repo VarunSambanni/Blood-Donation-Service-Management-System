@@ -8,6 +8,8 @@ const OrganisersList = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const [organisersList, setOrganisersList] = useState([]);
+    const [nameFreqMap, setNameFreqMap] = useState({});
+
 
     useEffect(() => {
         setIsLoading(true);
@@ -34,6 +36,36 @@ const OrganisersList = () => {
         setIsLoading(false);
     }, []);
 
+    useEffect(() => {
+        setIsLoading(true);
+        fetch('http://localhost:5000/getEventNamesByIds-Admin', {
+            method: "GET",
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success === false) {
+                    window.alert(data.msg);
+                }
+                else {
+                    for (const [key, value] of Object.entries(data.data)) {
+                        nameFreqMap[value] = 0;
+                    }
+                    for (const [key, value] of Object.entries(data.data)) {
+                        nameFreqMap[value]++;
+                    }
+                    console.log(nameFreqMap);
+                    setNameFreqMap(nameFreqMap);
+                }
+            })
+            .catch(err => {
+                console.log("Error connecting to server from mainDonor");
+            })
+        setIsLoading(false);
+    }, []);
+
 
     return <>
         <div>
@@ -44,6 +76,7 @@ const OrganisersList = () => {
                         <th>Name</th>
                         <th>Email No</th>
                         <th>Size</th>
+                        <th>Events Organised</th>
                     </tr>
                     {
                         organisersList.map((organiser, idx) => {
@@ -52,6 +85,7 @@ const OrganisersList = () => {
                                 <td>{organiser.name}</td>
                                 <td>{organiser.email}</td>
                                 <td>{organiser.size}</td>
+                                <td>{nameFreqMap[organiser.name]}</td>
                             </tr>
                         })
                     }

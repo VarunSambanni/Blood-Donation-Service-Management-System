@@ -29,11 +29,14 @@ const MainDonor = () => {
 
     return <>
         <div className="mainContainer">
+
             <div className="loggedInBar">
                 <div className="loggedInInfo">
                     Logged In As : {localStorage.getItem("email")}
                 </div>
-                <Logout />
+                <div className="adminButtonsContainer">
+                    <Logout />
+                </div>
             </div>
             <Router>
                 <Switch>

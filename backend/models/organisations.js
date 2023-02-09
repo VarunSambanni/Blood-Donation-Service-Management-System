@@ -15,6 +15,7 @@ module.exports = class Organisation {
         );
     }
 
+
     static fetchAll() {
         return db.execute('SELECT org_id, email, name, size FROM organisations');
     }

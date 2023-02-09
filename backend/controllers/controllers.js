@@ -84,7 +84,6 @@ exports.postLoginAdmin = (req, res, next) => {
 
 
 exports.getCheckAuth = (req, res, next) => {
-    console.log("Auth successful");
     return res.status(200).json({ success: true, msg: "Successfully Authenticated" });
 }
 
