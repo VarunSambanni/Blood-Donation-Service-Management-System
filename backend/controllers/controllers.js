@@ -4,6 +4,8 @@ const Organisation = require('../models/organisations');
 const Donor = require('../models/donors');
 const Event = require('../models/events');
 const Registration = require('../models/registrations');
+const Donation = require('../models/donations');
+const BloodUnit = require('../models/bloodunits');
 
 JWT_SECRET_DONOR = 'secret-1';
 JWT_SECRET_ORGANISATION = 'secret-2';
@@ -196,7 +198,7 @@ exports.postRegisterEvent = (req, res, next) => {
     console.log(Number(donor_id), " registering for event ", event_id);
     const registartion = new Registration(donor_id, event_id);
     registartion.save()
-        .then(() => {
+        .then(data => {
             return res.json({ success: true, msg: "Event registration successful" });
         })
         .catch(err => {
@@ -225,10 +227,10 @@ exports.getRegistrationsByIds = (req, res, next) => {
             let newData = {};
             for (let i = 0; i < data[0].length; i++) {
                 if (data[0][i].event_id in newData === false) {
-                    newData[data[0][i].event_id] = [{ email: data[0][i].email, phone_no: data[0][i].phone_no, blood_type: data[0][i].blood_type }];
+                    newData[data[0][i].event_id] = [{ donor_id: data[0][i].donor_id, email: data[0][i].email, phone_no: data[0][i].phone_no, blood_type: data[0][i].blood_type }];
                 }
                 else {
-                    newData[data[0][i].event_id].push({ email: data[0][i].email, phone_no: data[0][i].phone_no, blood_type: data[0][i].blood_type });
+                    newData[data[0][i].event_id].push({ donor_id: data[0][i].donor_id, email: data[0][i].email, phone_no: data[0][i].phone_no, blood_type: data[0][i].blood_type });
                 }
             }
             console.log(newData);
@@ -247,6 +249,7 @@ exports.getDonorsList = (req, res, next) => {
             return res.json({ success: true, data: data[0] });
         })
         .catch(err => {
+            console.log("Error fetching donors list ", err);
             return res.json({ success: false, msg: "Error fetching donors list" });
         })
 }
@@ -257,6 +260,51 @@ exports.getOrganisersList = (req, res, next) => {
             return res.json({ success: true, data: data[0] });
         })
         .catch(err => {
-            return res.json({ success: false, msg: "Error fetching donors list" });
+            console.log("Error fetching organisers list ", err);
+            return res.json({ success: false, msg: "Error fetching organisers list" });
+        })
+}
+
+exports.postBloodDonation = (req, res, next) => {
+    const donor_id = req.body.donor_id;
+    const blood_type = req.body.blood_type;
+    const donation = new Donation(null, blood_type, donor_id);
+
+    donation.save()
+        .then(() => {
+
+            donation.fetchAll()
+                .then(data => {
+                    const don_id = data[0][data[0].length - 1].don_id;
+                    console.log("blood_type ", blood_type);
+                    const bloodUnit = new BloodUnit(null, blood_type, don_id);
+                    bloodUnit.save()
+                        .then(() => {
+                            return res.json({ success: true, msg: "Donation made successfully" });
+                        })
+                        .catch(err => {
+                            console.log("Error making donation ", err);
+                            return res.json({ success: false, msg: "Error making donation" });
+                        })
+                })
+                .catch(err => {
+                    console.log("Error making donation ", err);
+                    return res.json({ success: false, msg: "Error making donation" });
+                })
+        })
+        .catch(err => {
+            console.log("Error making donation ", err);
+            return res.json({ success: false, msg: "Error making donation" });
+        })
+}
+
+exports.getBloodUnitsList = (req, res, next) => {
+    BloodUnit.fetchAll()
+        .then(data => {
+            return res.json({ success: true, data: data[0] });
+        })
+        .catch(err => {
+            console.log("Error fetching bloodunits list ", err);
+            return res.json({ success: false, msg: "Error fetching bloodunits list" });
         })
 }

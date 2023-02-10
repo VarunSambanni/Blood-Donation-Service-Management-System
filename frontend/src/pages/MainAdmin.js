@@ -6,6 +6,7 @@ import Logout from "../components/Logout";
 import BloodReception from "./BloodReception";
 import DonorsList from "./DonorsList";
 import OrganisersList from "./OrganisationsList";
+import BloodUnitsList from "./BloodUnitsList";
 
 const MainAdmin = () => {
 
@@ -53,6 +54,7 @@ const MainAdmin = () => {
                         <a href='/mainAdmin/bloodReception' onClick={() => localStorage.setItem("menuSelected", false)} className="menuItem">Blood Reception</a>
                         <a href='/mainAdmin/donorsList' onClick={() => localStorage.setItem("menuSelected", false)} className="menuItem">Donors List</a>
                         <a href='/mainAdmin/organisersList' onClick={() => localStorage.setItem("menuSelected", false)} className="menuItem">Organisers List</a>
+                        <a href='/mainAdmin/bloodUnitsList' onClick={() => localStorage.setItem("menuSelected", false)} className="menuItem">Blood Units List</a>
                     </div>
                     :
                     <Router>
@@ -68,6 +70,9 @@ const MainAdmin = () => {
                             </Route>
                             <Route exact path='/mainAdmin/organisersList'>
                                 <OrganisersList />
+                            </Route>
+                            <Route exact path='/mainAdmin/bloodUnitsList'>
+                                <BloodUnitsList />
                             </Route>
                         </Switch>
                     </Router>

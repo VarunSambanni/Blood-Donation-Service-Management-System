@@ -3,24 +3,24 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import '../index.css';
 
 
-const BloodReception = () => {
+const BloodDonation = () => {
 
     const [loading, setIsLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [phoneNo, setPhoneNo] = useState('');
-    const [name, setName] = useState('');
+    const [donorId, setDonorId] = useState('');
     const [bloodType, setBloodType] = useState('O+');
 
-    const receiveHandler = () => {
+    const donationHandler = () => {
         setIsLoading(true);
-        fetch(`http://localhost:5000/`, {
+        fetch(`http://localhost:5000/bloodDonation`, {
             method: "POST",
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
                 'x-access-token': localStorage.getItem('token')
             },
-            body: JSON.stringify({})
+            body: JSON.stringify({ donor_id: donorId, blood_type: bloodType })
         })
             .then(res => res.json())
             .then(data => {
@@ -45,8 +45,8 @@ const BloodReception = () => {
             <div className="loginContainer">
                 <div className="login">
                     <div className="inputContainer">
-                        <p>Name : </p>
-                        <input value={name} onChange={(e) => setName(e.target.value)} >
+                        <p>Donor Id : </p>
+                        <input value={donorId} onChange={(e) => setDonorId(e.target.value)} >
                         </input>
                     </div>
                     <div className="inputContainer">
@@ -73,7 +73,7 @@ const BloodReception = () => {
                         </select>
                     </div>
                     <div className="center">
-                        <button onClick={receiveHandler}>Receive</button>
+                        <button onClick={donationHandler}>Donate</button>
                     </div>
                 </div>
             </div>
@@ -81,4 +81,4 @@ const BloodReception = () => {
     </>
 }
 
-export default BloodReception;
+export default BloodDonation;

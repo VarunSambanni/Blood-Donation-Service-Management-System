@@ -8,6 +8,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import BloodDonation from "./BloodDonation";
 
 const MainOrganisation = () => {
 
@@ -124,6 +125,7 @@ const MainOrganisation = () => {
                             <AddEvents />
                         </Route>
                         <Route exact path='/mainOrganisation/bloodDonation'>
+                            <BloodDonation />
                         </Route>
                     </Switch>
                 </Router>
@@ -160,6 +162,7 @@ const MainOrganisation = () => {
                                             {localStorage.getItem("idRegistrationsMap") &&
                                                 <table>
                                                     <tr>
+                                                        <th>Donor Id</th>
                                                         <th>Email</th>
                                                         <th>Phone No</th>
                                                         <th>Blood Type</th>
@@ -169,6 +172,7 @@ const MainOrganisation = () => {
                                                         && JSON.parse(localStorage.getItem("idRegistrationsMap"))[event.event_id].length > 0
                                                         && JSON.parse(localStorage.getItem("idRegistrationsMap"))[event.event_id].map((reg, index) => {
                                                             return <tr key={index}>
+                                                                <td>{reg.donor_id}</td>
                                                                 <td>{reg.email}</td>
                                                                 <td>{reg.phone_no}</td>
                                                                 <td>{reg.blood_type}</td>

@@ -92,4 +92,8 @@ router.get('/getDonorsList', verifyJWTAdmin, controllers.getDonorsList);
 
 router.get('/getOrganisersList', verifyJWTAdmin, controllers.getOrganisersList);
 
+router.post('/bloodDonation', verifyJWTOrganisation, controllers.postBloodDonation);
+
+router.get('/getBloodUnitsList', verifyJWTAdmin, controllers.getBloodUnitsList);
+
 module.exports = router; 
