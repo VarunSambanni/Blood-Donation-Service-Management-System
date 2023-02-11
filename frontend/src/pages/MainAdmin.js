@@ -7,8 +7,17 @@ import BloodReception from "./BloodReception";
 import DonorsList from "./DonorsList";
 import OrganisersList from "./OrganisationsList";
 import BloodUnitsList from "./BloodUnitsList";
+import PermIdentityIcon from '@mui/icons-material/PermIdentity';
+import { LinearProgress } from "@mui/material";
+import GroupsIcon from '@mui/icons-material/Groups';
+import BloodtypeIcon from '@mui/icons-material/Bloodtype';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import InventoryIcon from '@mui/icons-material/Inventory';
 
 const MainAdmin = () => {
+
+    const [isLoading, setIsLoading] = useState(false);
 
     if (localStorage.getItem("menuSelected") === null)
         localStorage.setItem("menuSelected", true);
@@ -37,7 +46,7 @@ const MainAdmin = () => {
         <div>
             <div className="loggedInBar">
                 <div className="loggedInInfo">
-                    Logged In As : {localStorage.getItem("email")}
+                    <PermIdentityIcon style={{ marginBottom: '-0.28em', transform: 'scale(1.1)', backgroundColor: 'blue', color: 'white', borderRadius: '0.2em' }} />&nbsp;{localStorage.getItem("email")}
                 </div>
                 <div className="adminButtonsContainer">
                     <button style={{ marginRight: '0.4em' }} onClick={() => {
@@ -47,14 +56,42 @@ const MainAdmin = () => {
                     <Logout />
                 </div>
             </div>
+            <hr />
+
+            {JSON.parse(localStorage.getItem("menuSelected")) === true &&
+                <div className="loadingContainer">
+                    {isLoading && <LinearProgress />}
+                </div>
+            }
+            {JSON.parse(localStorage.getItem("menuSelected")) === true &&
+                <div className="center">
+                    <div className='pageTitle'>ADMIN HOME</div>
+                </div>
+            }
+
             {
                 JSON.parse(localStorage.getItem("menuSelected")) === true ?
-                    <div className="menu">
-                        <a href='/mainAdmin/organisationSignup' onClick={() => localStorage.setItem("menuSelected", false)} className="menuItem">Organisation Signup </a>
-                        <a href='/mainAdmin/bloodReception' onClick={() => localStorage.setItem("menuSelected", false)} className="menuItem">Blood Reception</a>
-                        <a href='/mainAdmin/donorsList' onClick={() => localStorage.setItem("menuSelected", false)} className="menuItem">Donors List</a>
-                        <a href='/mainAdmin/organisersList' onClick={() => localStorage.setItem("menuSelected", false)} className="menuItem">Organisers List</a>
-                        <a href='/mainAdmin/bloodUnitsList' onClick={() => localStorage.setItem("menuSelected", false)} className="menuItem">Blood Units List</a>
+                    <div className="menu center">
+                        <a href='/mainAdmin/organisationSignup' onClick={() => localStorage.setItem("menuSelected", false)} className="menuItem ">
+                            <GroupsIcon style={{ marginBottom: '-0.28em', transform: 'scale(1.2)', color: 'black', borderRadius: '0.2em' }} />&nbsp;
+                            Organisation Signup
+                        </a>
+                        <a href='/mainAdmin/bloodReception' onClick={() => localStorage.setItem("menuSelected", false)} className="menuItem ">
+                            <BloodtypeIcon style={{ marginBottom: '-0.28em', transform: 'scale(1.2)', color: 'black', borderRadius: '0.2em' }} />&nbsp;
+                            Blood Reception
+                        </a>
+                        <a href='/mainAdmin/donorsList' onClick={() => localStorage.setItem("menuSelected", false)} className="menuItem ">
+                            <PeopleAltIcon style={{ marginBottom: '-0.28em', transform: 'scale(1.2)', color: 'black', borderRadius: '0.2em' }} />&nbsp;
+                            Donors
+                        </a>
+                        <a href='/mainAdmin/organisersList' onClick={() => localStorage.setItem("menuSelected", false)} className="menuItem ">
+                            <ListAltIcon style={{ marginBottom: '-0.28em', transform: 'scale(1.2)', color: 'black', borderRadius: '0.2em' }} />&nbsp;
+                            Organisers
+                        </a>
+                        <a href='/mainAdmin/bloodUnitsList' onClick={() => localStorage.setItem("menuSelected", false)} className="menuItem ">
+                            <InventoryIcon style={{ marginBottom: '-0.28em', transform: 'scale(1.2)', color: 'black', borderRadius: '0.2em' }} />&nbsp;
+                            Blood Units
+                        </a>
                     </div>
                     :
                     <Router>

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import '../index.css';
+import { LinearProgress } from "@mui/material";
 
 
 const BloodReception = () => {
 
-    const [loading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [phoneNo, setPhoneNo] = useState('');
     const [name, setName] = useState('');
@@ -41,6 +42,12 @@ const BloodReception = () => {
 
 
     return <>
+        <div className="loadingContainer">
+            {isLoading && <LinearProgress />}
+        </div>
+        <div className="center">
+            <div className='pageTitle'>BLOOD RECEPTION</div>
+        </div>
         <div className="mainContainer">
             <div className="loginContainer">
                 <div className="login">

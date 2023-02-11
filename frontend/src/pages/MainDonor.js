@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import '../index.css';
 import Events from '../pages/Events';
 import Logout from "../components/Logout";
+import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 
 const MainDonor = () => {
 
@@ -29,15 +30,15 @@ const MainDonor = () => {
 
     return <>
         <div className="mainContainer">
-
             <div className="loggedInBar">
                 <div className="loggedInInfo">
-                    Logged In As : {localStorage.getItem("email")}
+                    <PermIdentityIcon style={{ marginBottom: '-0.28em', transform: 'scale(1.1)', backgroundColor: 'blue', color: 'white', borderRadius: '0.2em' }} />&nbsp;{localStorage.getItem("email")}
                 </div>
                 <div className="adminButtonsContainer">
                     <Logout />
                 </div>
             </div>
+            <hr />
             <Router>
                 <Switch>
                     <Route exact path='/mainDonor/'>

@@ -10,7 +10,7 @@ import MainAdmin from './pages/MainAdmin';
 function App() {
   return (
     <div className="App">
-      <Header></Header>
+      <Header />
       <Router>
         <Switch>
           <Route exact path='/'>

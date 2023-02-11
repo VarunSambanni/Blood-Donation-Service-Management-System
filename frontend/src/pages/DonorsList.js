@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import '../index.css';
-
+import { LinearProgress } from "@mui/material";
 
 const DonorsList = () => {
 
@@ -36,6 +36,12 @@ const DonorsList = () => {
 
 
     return <>
+        <div className="loadingContainer">
+            {isLoading && <LinearProgress />}
+        </div>
+        <div className="center">
+            <div className='pageTitle'>DONORS</div>
+        </div>
         <div>
             <div className="center tableContainer">
                 <table>

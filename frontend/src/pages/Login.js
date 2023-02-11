@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import '../index.css';
+import { Link } from "react-router-dom";
 
 const Login = () => {
 
@@ -65,6 +66,9 @@ const Login = () => {
                 </div>
                 <div className="center">
                     <button onClick={loginHandler}>Login</button>
+                </div>
+                <div className="center">
+                    <button onClick={() => window.location.replace("/signup")}>Click here to signup</button>
                 </div>
             </div>
         </div>

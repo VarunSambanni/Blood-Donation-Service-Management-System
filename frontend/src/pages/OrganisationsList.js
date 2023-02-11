@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import '../index.css';
-
+import { LinearProgress } from "@mui/material";
 
 const OrganisersList = () => {
 
     const [isLoading, setIsLoading] = useState(false);
-
     const [organisersList, setOrganisersList] = useState([]);
     const [nameFreqMap, setNameFreqMap] = useState({});
 
@@ -68,6 +67,12 @@ const OrganisersList = () => {
 
 
     return <>
+        <div className="loadingContainer">
+            {isLoading && <LinearProgress />}
+        </div>
+        <div className="center">
+            <div className='pageTitle'>ORGANISERS</div>
+        </div>
         <div>
             <div className="center tableContainer">
                 <table>

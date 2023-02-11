@@ -5,7 +5,7 @@ const Header = () => {
     return <>
         <div className="header">
             <div className="title">
-                Blood Donation Service Management System
+                BLOOD DONATION SERVICE MANAGEMENT SYSTEM
             </div>
         </div>
     </>

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import '../index.css';
+import { LinearProgress } from "@mui/material";
 
 
 const OrganisationSignup = () => {
 
-    const [loading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
@@ -44,6 +45,12 @@ const OrganisationSignup = () => {
 
 
     return <>
+        <div className="loadingContainer">
+            {isLoading && <LinearProgress />}
+        </div>
+        <div className="center">
+            <div className='pageTitle'>ORGANISATION SIGNUP</div>
+        </div>
         <div className="mainContainer">
             <div className="loginContainer">
                 <div className="login">

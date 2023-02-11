@@ -1,3 +1,4 @@
+import { LinearProgress } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import '../index.css';
 
@@ -86,7 +87,12 @@ const Events = () => {
 
     return <>
         <div>
-            {isLoading && <div>Loading...</div>}
+            <div className="loadingContainer">
+                {isLoading && <LinearProgress />}
+            </div>
+            <div className="center">
+                <div className='pageTitle'>EVENTS</div>
+            </div>
             <div className="eventsContainer">
                 {events.map((event, idx) => {
                     return <div className="eventContainer" key={idx}>
