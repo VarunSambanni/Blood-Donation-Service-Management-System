@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import '../index.css';
+import { LinearProgress } from "@mui/material";
 
 const AddEvents = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -38,9 +39,13 @@ const AddEvents = () => {
 
     return <>
         <div>
-            {isLoading && <div>Loading...</div>}
+            <div className="loadingContainer">
+                {isLoading && <LinearProgress />}
+            </div>
+            <div className="center">
+                <div className='pageTitle'>ADD EVENT</div>
+            </div>
             <div className="loginContainer">
-                {isLoading && <div>Loading...</div>}
                 <div className="login addEventsContainer">
                     <div className="inputContainer">
                         <p>Description : </p>

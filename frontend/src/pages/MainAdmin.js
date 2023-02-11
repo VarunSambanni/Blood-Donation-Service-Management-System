@@ -58,11 +58,9 @@ const MainAdmin = () => {
             </div>
             <hr />
 
-            {JSON.parse(localStorage.getItem("menuSelected")) === true &&
-                <div className="loadingContainer">
-                    {isLoading && <LinearProgress />}
-                </div>
-            }
+            <div className="loadingContainer">
+                {isLoading && <LinearProgress />}
+            </div>
             {JSON.parse(localStorage.getItem("menuSelected")) === true &&
                 <div className="center">
                     <div className='pageTitle'>ADMIN HOME</div>

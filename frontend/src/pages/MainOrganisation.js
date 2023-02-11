@@ -9,6 +9,11 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import BloodDonation from "./BloodDonation";
+import PermIdentityIcon from '@mui/icons-material/PermIdentity';
+import GroupsIcon from '@mui/icons-material/Groups';
+import BloodtypeIcon from '@mui/icons-material/Bloodtype';
+import EventIcon from '@mui/icons-material/Event';
+import { LinearProgress } from "@mui/material";
 
 const MainOrganisation = () => {
 
@@ -96,12 +101,15 @@ const MainOrganisation = () => {
 
     return <>
         <div className="mainContainer">
-            {isLoading && <div>Loading...</div>}
             <div className="loggedInBar">
                 <div className="loggedInInfo">
-                    Logged In As : {localStorage.getItem("email")}
+                    <div>
+                        <PermIdentityIcon style={{ marginBottom: '-0.28em', transform: 'scale(1.1)', backgroundColor: 'blue', color: 'white', borderRadius: '0.2em' }} />&nbsp;{localStorage.getItem("email")}
+                    </div>
                     <br />
-                    Organisation Name : {localStorage.getItem("name")}
+                    <div>
+                        <GroupsIcon style={{ marginBottom: '-0.28em', transform: 'scale(1.2)', color: 'black', borderRadius: '0.2em' }} />&nbsp; {localStorage.getItem("name")}
+                    </div>
                 </div>
                 <div className="adminButtonsContainer">
                     <button style={{ marginRight: '0.4em' }} onClick={() => {
@@ -111,11 +119,26 @@ const MainOrganisation = () => {
                     <Logout />
                 </div>
             </div>
+            <hr />
+            <div className="loadingContainer">
+                {isLoading && <LinearProgress />}
+            </div>
+            {JSON.parse(localStorage.getItem("menuSelected")) === true &&
+                <div className="center">
+                    <div className='pageTitle'>ORGANISATION HOME</div>
+                </div>
+            }
             {
                 JSON.parse(localStorage.getItem("menuSelected")) === true &&
                 <div className="menu">
-                    <a href='/mainOrganisation/addEvents' onClick={() => { localStorage.setItem("menuSelected", false) }} className="menuItem">Add Event </a>
-                    <a href='/mainOrganisation/bloodDonation' onClick={() => { localStorage.setItem("menuSelected", false) }} className="menuItem">Blood Donation</a>
+                    <a href='/mainOrganisation/addEvents' onClick={() => { localStorage.setItem("menuSelected", false) }} className="menuItem">
+                        <EventIcon style={{ marginBottom: '-0.28em', transform: 'scale(1.2)', color: 'black', borderRadius: '0.2em' }} />&nbsp;
+                        Add Event
+                    </a>
+                    <a href='/mainOrganisation/bloodDonation' onClick={() => { localStorage.setItem("menuSelected", false) }} className="menuItem">
+                        <BloodtypeIcon style={{ marginBottom: '-0.28em', transform: 'scale(1.2)', color: 'black', borderRadius: '0.2em' }} />&nbsp;
+                        Blood Donation
+                    </a>
                 </div>
             }
             {JSON.parse(localStorage.getItem("menuSelected")) === false &&
@@ -132,9 +155,6 @@ const MainOrganisation = () => {
             }
             {JSON.parse(localStorage.getItem("menuSelected")) === true &&
                 <div className="eventsContainer">
-                    <div className="center">
-                        LIST OF EVENTS ORGANISED
-                    </div>
                     {
                         events.map((event, idx) => {
                             return <div className="eventContainer">
@@ -149,7 +169,7 @@ const MainOrganisation = () => {
                                     </div>
                                     <hr />
                                 </div>
-                                <Accordion sx={{ backgroundColor: '#f7fcfc', border: '1px solid black' }}>
+                                <Accordion sx={{ backgroundColor: '#f5fcfc', border: '1px solid black' }}>
                                     <AccordionSummary
                                         expandIcon={<ExpandMoreIcon />}
                                         aria-controls="panel1a-content"
