@@ -13,14 +13,14 @@ const BloodReception = () => {
 
     const receiveHandler = () => {
         setIsLoading(true);
-        fetch(`http://localhost:5000/`, {
+        fetch(`http://localhost:5000/bloodReception`, {
             method: "POST",
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
                 'x-access-token': localStorage.getItem('token')
             },
-            body: JSON.stringify({})
+            body: JSON.stringify({ name: name, phone_no: phoneNo, email: email, blood_type: bloodType })
         })
             .then(res => res.json())
             .then(data => {

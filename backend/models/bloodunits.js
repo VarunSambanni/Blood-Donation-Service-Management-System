@@ -13,6 +13,19 @@ module.exports = class bloodUnit {
         );
     }
 
+    static findByBloodType(blood_type) {
+        console.log("Query ", blood_type);
+        return db.execute(
+            'SELECT * FROM bloodunits WHERE blood_type = ?', [blood_type]
+        );
+    }
+
+    static deleteById(unit_id) {
+        return db.execute(
+            'DELETE FROM bloodunits WHERE unit_id = ?', [unit_id]
+        );
+    }
+
     static fetchAll() {
         return db.execute(
             'SELECT * FROM bloodunits ', []

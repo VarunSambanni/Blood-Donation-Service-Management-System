@@ -6,6 +6,7 @@ const Event = require('../models/events');
 const Registration = require('../models/registrations');
 const Donation = require('../models/donations');
 const BloodUnit = require('../models/bloodunits');
+const Reception = require('../models/receptions');
 
 JWT_SECRET_DONOR = 'secret-1';
 JWT_SECRET_ORGANISATION = 'secret-2';
@@ -265,6 +266,9 @@ exports.getOrganisersList = (req, res, next) => {
         })
 }
 
+
+//Add donor verification
+
 exports.postBloodDonation = (req, res, next) => {
     const donor_id = req.body.donor_id;
     const blood_type = req.body.blood_type;
@@ -272,11 +276,9 @@ exports.postBloodDonation = (req, res, next) => {
 
     donation.save()
         .then(() => {
-
             donation.fetchAll()
                 .then(data => {
                     const don_id = data[0][data[0].length - 1].don_id;
-                    console.log("blood_type ", blood_type);
                     const bloodUnit = new BloodUnit(null, blood_type, don_id);
                     bloodUnit.save()
                         .then(() => {
@@ -306,5 +308,40 @@ exports.getBloodUnitsList = (req, res, next) => {
         .catch(err => {
             console.log("Error fetching bloodunits list ", err);
             return res.json({ success: false, msg: "Error fetching bloodunits list" });
+        })
+}
+
+exports.postBloodReception = (req, res, next) => {
+    const name = req.body.name;
+    const email = req.body.email;
+    const phone_no = req.body.phone_no;
+    const blood_type = req.body.blood_type;
+
+    BloodUnit.findByBloodType(blood_type)
+        .then(data => {
+            if (data[0].length === 0) {
+                return res.json({ success: false, msg: `No ${blood_type} blood units available` });
+            }
+            const unit_id = data[0][data[0].length - 1].unit_id;
+            const reception = new Reception(null, name, email, phone_no, blood_type, unit_id);
+            reception.save()
+                .then(() => {
+                    BloodUnit.deleteById(unit_id)
+                        .then(() => {
+                            return res.json({ success: true, msg: "Reception made successfully" });
+                        })
+                        .catch(err => {
+                            console.log("Error making reception ", err);
+                            return res.json({ success: false, msg: "Error making reception" });
+                        })
+                })
+                .catch(err => {
+                    console.log("Error making reception ", err);
+                    return res.json({ success: false, msg: "Error making reception" });
+                })
+        })
+        .catch(err => {
+            console.log("Error making reception ", err);
+            return res.json({ success: false, msg: "Error making reception" });
         })
 }
