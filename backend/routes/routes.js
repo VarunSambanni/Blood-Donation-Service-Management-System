@@ -4,17 +4,13 @@ const jwt = require('jsonwebtoken');
 
 const controllers = require('../controllers/controllers');
 
-JWT_SECRET_DONOR = 'secret-1';
-JWT_SECRET_ORGANISATION = 'secret-2';
-JWT_SECRET_ADMIN = 'secret-3';
-
 const verifyJWTDonor = (req, res, next) => {
     const token = req.headers['x-access-token'];
     if (!token) {
         return res.json({ success: false, msg: "Token needed" });
     }
     else {
-        jwt.verify(token, JWT_SECRET_DONOR, (err, decoded) => {
+        jwt.verify(token, process.env.JWT_SECRET_DONOR, (err, decoded) => {
             if (err) {
                 return res.json({ success: false, msg: "Failed to Authenticate" });
             }
@@ -30,7 +26,7 @@ const verifyJWTOrganisation = (req, res, next) => {
         return res.json({ success: false, msg: "Token needed" });
     }
     else {
-        jwt.verify(token, JWT_SECRET_ORGANISATION, (err, decoded) => {
+        jwt.verify(token, process.env.JWT_SECRET_ORGANISATION, (err, decoded) => {
             if (err) {
                 return res.json({ success: false, msg: "Failed to Authenticate" });
             }
@@ -46,7 +42,7 @@ const verifyJWTAdmin = (req, res, next) => {
         return res.json({ success: false, msg: "Token needed" });
     }
     else {
-        jwt.verify(token, JWT_SECRET_ADMIN, (err, decoded) => {
+        jwt.verify(token, process.env.JWT_SECRET_ADMIN, (err, decoded) => {
             if (err) {
                 return res.json({ success: false, msg: "Failed to Authenticate" });
             }

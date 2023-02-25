@@ -8,9 +8,6 @@ const Donation = require('../models/donations');
 const BloodUnit = require('../models/bloodunits');
 const Reception = require('../models/receptions');
 
-JWT_SECRET_DONOR = 'secret-1';
-JWT_SECRET_ORGANISATION = 'secret-2';
-JWT_SECRET_ADMIN = 'secret-3';
 
 exports.getHome = (req, res, next) => {
     return res.json({ success: true, msg: "Hello" });
@@ -26,7 +23,7 @@ exports.postLoginDonor = (req, res, next) => {
             if (data[0].length === 0) {
                 return res.json({ success: false, msg: "Invalid credentials" });
             }
-            const token = jwt.sign({}, JWT_SECRET_DONOR, {
+            const token = jwt.sign({}, process.env.JWT_SECRET_DONOR, {
                 expiresIn: '1h'
             });
 
@@ -49,7 +46,7 @@ exports.postLoginOrganisation = (req, res, next) => {
                 return res.json({ success: false, msg: "Invalid credentials" });
             }
             const name = data[0][0].name;
-            const token = jwt.sign({}, JWT_SECRET_ORGANISATION, {
+            const token = jwt.sign({}, process.env.JWT_SECRET_ORGANISATION, {
                 expiresIn: '1h'
             });
             return res.json({ success: true, msg: "Succesfully logged In", token: token, email: email, name: name, id: data[0][0].org_id });
@@ -73,7 +70,7 @@ exports.postLoginAdmin = (req, res, next) => {
             if (data[0].length === 0) {
                 return res.json({ success: false, msg: "Invalid credentials" });
             }
-            const token = jwt.sign({}, JWT_SECRET_ADMIN, {
+            const token = jwt.sign({}, process.env.JWT_SECRET_ADMIN, {
                 expiresIn: '1h'
             });
 
