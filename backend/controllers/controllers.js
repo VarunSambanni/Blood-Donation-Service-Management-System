@@ -2,6 +2,8 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const PDFDocument = require('pdfkit');
 const getStream = require('get-stream');
+const { v4: uuidv4 } = require('uuid');
+
 
 const Organisation = require('../models/organisations');
 const Donor = require('../models/donors');
@@ -10,6 +12,7 @@ const Registration = require('../models/registrations');
 const Donation = require('../models/donations');
 const BloodUnit = require('../models/bloodunits');
 const Reception = require('../models/receptions');
+const unverifiedUsers = require('../models/unverifiedUsers');
 
 const getTime = () => {
     let date_ob = new Date();
@@ -113,6 +116,7 @@ exports.getCheckAuth = (req, res, next) => {
 
 exports.postSignupDonor = (req, res, next) => {
     console.log("Signing up donor : ", req.body.email);
+    const code = req.body.code;
     const email = req.body.email;
     const password = req.body.password;
     const confirmPassword = req.body.confirmPassword;
@@ -120,8 +124,8 @@ exports.postSignupDonor = (req, res, next) => {
     const blood_type = req.body.blood_type;
     const donor = new Donor(null, email, password, phone_no, blood_type);
 
-    if (password !== confirmPassword) {
-        return res.json({ success: false, msg: "Passwords don't match" });
+    if (/\S+@\S+\.\S+/.test(email) === false || password.length < 8 || password !== confirmPassword) {
+        return res.json({ success: false, msg: "Enter valid inputs" });
     }
 
     Donor.findByEmail(email)
@@ -129,13 +133,54 @@ exports.postSignupDonor = (req, res, next) => {
             if (data[0].length !== 0) {
                 return res.json({ success: false, msg: "Donor already exists" });
             }
-            donor.save()
-                .then(() => {
-                    return res.json({ success: true, msg: "Signed Up Successfully" });
+
+            unverifiedUsers.findOne({ email: email })
+                .then(unverifiedUserData => {
+                    if (unverifiedUserData.code !== code) {
+                        return res.json({ success: false, msg: "Invalid code" });
+                    }
+                    if (((new Date()).getTime() / 1000) - parseInt(unverifiedUserData.time) >= 600) {
+                        unverifiedUsers.findOneAndDelete({ email: email })
+                            .then(result => {
+
+                            })
+                            .catch(err => {
+                                console.log("Error deleting from unverifiedUsers ", err);
+                            })
+                        return res.json({ success: false, msg: "Code expired, restart sign up process" });
+                    }
+                    donor.save()
+                        .then((data) => {
+                            unverifiedUsers.findOneAndDelete({ email: email })
+                                .then(result => {
+
+                                })
+                                .catch(err => {
+                                    console.log("Error deleting from unverifiedUsers ", err);
+                                })
+                            var mailOptions = {
+                                from: process.env.TRANSPORTER_EMAIL,
+                                to: email,
+                                subject: 'Signup Successful',
+                                text: `Thank you for signing up on BLOOD DONATION SERVICE MANAGEMENT SYSTEM. Your ID : ${data[0].insertId}`,
+                                html: `<h2>Thank you for signing up on BLOOD DONATION SERVICE MANAGEMENT SYSTEM.<br/>Your ID : ${data[0].insertId} </h2>`
+                            }
+                            transport.sendMail(mailOptions, (err, info) => {
+                                if (err) {
+                                    console.log("Error sending mail for blood donation");
+                                }
+                                console.log(`Thank you for signing up on BLOOD DONATION SERVICE MANAGEMENT SYSTEM. Your ID : ${data[0].insertId}`);
+                            })
+                            return res.json({ success: true, msg: "Signed Up Successfully" });
+                        })
+                        .catch(err => {
+                            console.log("Error signing up ", err)
+                            return res.json({ success: false, msg: "Signup Unsuccessful" })
+                        })
                 })
                 .catch(err => {
-                    console.log("Error signing up ", err)
-                    return res.json({ success: false, msg: "Signup Unsuccessful" })
+                    console.log("Error finding user ", err);
+                    return res.json({ success: false, msg: "Error finding user" });
                 })
         })
 }
@@ -427,5 +472,57 @@ exports.postBloodReception = (req, res, next) => {
         .catch(err => {
             console.log("Error making reception ", err);
             return res.json({ success: false, msg: "Error making reception" });
+        })
+}
+
+exports.postSendCode = (req, res, next) => {
+    const email = req.body.email;
+    const code = uuidv4();
+    if (/\S+@\S+\.\S+/.test(email) === false) {
+        return res.json({ success: false, msg: "Enter valid inputs" });
+    }
+    var mailOptions = {
+        from: process.env.TRANSPORTER_EMAIL,
+        to: email,
+        subject: 'Code for your signup',
+        text: `Your code: ${code}, expires in 10 minutes`,
+        html: `<h2> Your code: ${code}, expires in 10 minutes </h2>`
+    }
+
+    Donor.findByEmail(email)
+        .then(donorData => {
+            if (donorData[0].length > 0) {
+                return res.json({ success: false, msg: "Email ID already in use" });
+            }
+            unverifiedUsers.findOneAndDelete({ email: email })
+                .then(result => {
+                    const unverifiedUser = new unverifiedUsers({
+                        email: email,
+                        code: code,
+                        time: (new Date()).getTime() / 1000
+                    });
+                    unverifiedUser.save()
+                        .then(result => {
+                            transport.sendMail(mailOptions, (err, info) => {
+                                if (err) {
+                                    console.log("Error sending mail");
+                                    return res.json({ success: false, msg: "Error sending mail" });
+                                }
+                                return res.json({ success: true, msg: "Code sent to your email" });
+                            })
+                        })
+                        .catch(err => {
+                            console.log("Error sending code ", err);
+                            return res.json({ success: false, msg: "Error sending code" });
+                        })
+                })
+                .catch(err => {
+                    console.log("Error finding and deleting in unverifiedUsers ", err);
+                    return res.json({ success: false, msg: "Error sending code" });
+                })
+        })
+        .catch(err => {
+            console("Error sending code ", err);
+            return res.json({ success: false, msg: "Error sending code" });
         })
 }

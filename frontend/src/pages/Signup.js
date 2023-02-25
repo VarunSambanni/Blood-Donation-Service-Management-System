@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import '../index.css';
+import { LinearProgress } from "@mui/material";
 
 const Signup = () => {
 
@@ -9,6 +10,52 @@ const Signup = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [bloodType, setBloodType] = useState('O+');
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [code, setCode] = useState('');
+    const [codeSent, setCodeSent] = useState(false);
+
+    const sendCode = () => {
+        if (/\S+@\S+\.\S+/.test(email) === false) {
+            window.alert("Enter valid email address");
+            return;
+        }
+        if (password.length < 8) {
+            window.alert("Password must consists of 8 characters at least");
+            return;
+        }
+        if (password !== confirmPassword) {
+            window.alert("Passwords don't match");
+            return;
+        }
+        if (phoneNumber.length !== 10) {
+            window.alert("Enter valid phone number");
+            return;
+        }
+        setIsLoading(true);
+        fetch(`http://localhost:5000/sendCode`, {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: email, password: password, confirmPassword: confirmPassword, phone_no: phoneNumber, blood_type: bloodType })
+        })
+            .then(res => res.json())
+            .then(data => {
+                setIsLoading(false);
+                if (data.success === true) {
+                    setCodeSent(true);
+                    window.alert(data.msg);
+                }
+                else {
+                    setIsLoading(false);
+                    console.log("Error signing up");
+                    window.alert(data.msg);
+                }
+            })
+            .catch(err => {
+                window.alert("Error connecting to server");
+            })
+    }
 
     const signupHandler = () => {
         if (/\S+@\S+\.\S+/.test(email) === false) {
@@ -34,7 +81,7 @@ const Signup = () => {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email: email, password: password, confirmPassword: confirmPassword, phone_no: phoneNumber, blood_type: bloodType })
+            body: JSON.stringify({ email: email, password: password, confirmPassword: confirmPassword, phone_no: phoneNumber, blood_type: bloodType, code: code })
         })
             .then(res => res.json())
             .then(data => {
@@ -44,6 +91,7 @@ const Signup = () => {
                     window.location.replace(`http://localhost:3000/`);
                 }
                 else {
+                    setIsLoading(false);
                     console.log("Error signing up");
                     window.alert(data.msg);
                 }
@@ -51,13 +99,15 @@ const Signup = () => {
             .catch(err => {
                 window.alert("Error connecting to server");
             })
-        setIsLoading(false);
     }
 
 
     return <>
         <div className="loginContainer">
             <div className="login">
+                <div className="loadingContainer">
+                    {isLoading && <LinearProgress />}
+                </div>
                 <div className="inputContainer">
                     <p>Email : </p>
                     <input value={email} onChange={(e) => setEmail(e.target.value)} >
@@ -91,8 +141,13 @@ const Signup = () => {
                         <option value={"AB-"}>AB-</option>
                     </select>
                 </div>
+                <div className="inputContainer">
+                    <p>Code : </p>
+                    <input value={code} onChange={(e) => setCode(e.target.value)}>
+                    </input>
+                </div>
                 <div className="center">
-                    <button onClick={signupHandler}>Signup</button>
+                    <button onClick={codeSent ? signupHandler : sendCode}>{codeSent ? "Signup" : "Send Code"} </button>
                 </div>
             </div>
         </div>

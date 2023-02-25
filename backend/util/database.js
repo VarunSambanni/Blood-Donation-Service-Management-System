@@ -7,5 +7,5 @@ const pool = mysql.createPool({
     password: 'mysqlisnice'
 });
 
-console.log("Database Connection Successful ");
+console.log("Connected to MySQL Databsae");
 module.exports = pool.promise();

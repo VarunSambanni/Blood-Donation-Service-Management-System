@@ -94,4 +94,6 @@ router.get('/getBloodUnitsList', verifyJWTAdmin, controllers.getBloodUnitsList);
 
 router.post('/bloodReception', verifyJWTAdmin, controllers.postBloodReception);
 
+router.post('/sendCode', controllers.postSendCode);
+
 module.exports = router; 
