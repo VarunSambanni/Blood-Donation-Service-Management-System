@@ -106,7 +106,7 @@ const BloodUnitsList = () => {
             <div className='pageTitle'>BLOOD UNITS</div>
         </div>
         <div>
-            <div className="center tableContainer">
+            <div className="tableContainer">
                 <table>
                     <tr>
                         <th>Blood Type</th>
@@ -122,7 +122,7 @@ const BloodUnitsList = () => {
                     }
                 </table>
             </div>
-            <div className="center tableContainer">
+            <div className="tableContainer">
                 <table>
                     <tr>
                         <th>Unit Id</th>

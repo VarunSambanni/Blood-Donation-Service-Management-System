@@ -119,7 +119,7 @@ const MainOrganisation = () => {
                     <Logout />
                 </div>
             </div>
-            <hr />
+
             <div className="loadingContainer">
                 {isLoading && <LinearProgress />}
             </div>
@@ -180,26 +180,28 @@ const MainOrganisation = () => {
                                     <AccordionDetails>
                                         <div className="center">
                                             {localStorage.getItem("idRegistrationsMap") &&
-                                                <table>
-                                                    <tr>
-                                                        <th>Donor Id</th>
-                                                        <th>Email</th>
-                                                        <th>Phone No</th>
-                                                        <th>Blood Type</th>
-                                                    </tr>
-                                                    {JSON.parse(localStorage.getItem("idRegistrationsMap")) !== null
-                                                        && (event.event_id in JSON.parse(localStorage.getItem("idRegistrationsMap"))) === true
-                                                        && JSON.parse(localStorage.getItem("idRegistrationsMap"))[event.event_id].length > 0
-                                                        && JSON.parse(localStorage.getItem("idRegistrationsMap"))[event.event_id].map((reg, index) => {
-                                                            return <tr key={index}>
-                                                                <td>{reg.donor_id}</td>
-                                                                <td>{reg.email}</td>
-                                                                <td>{reg.phone_no}</td>
-                                                                <td>{reg.blood_type}</td>
-                                                            </tr>
-                                                        })
-                                                    }
-                                                </table>
+                                                <div className="tableContainer">
+                                                    <table>
+                                                        <tr>
+                                                            <th>Donor Id</th>
+                                                            <th>Email</th>
+                                                            <th>Phone No</th>
+                                                            <th>Blood Type</th>
+                                                        </tr>
+                                                        {JSON.parse(localStorage.getItem("idRegistrationsMap")) !== null
+                                                            && (event.event_id in JSON.parse(localStorage.getItem("idRegistrationsMap"))) === true
+                                                            && JSON.parse(localStorage.getItem("idRegistrationsMap"))[event.event_id].length > 0
+                                                            && JSON.parse(localStorage.getItem("idRegistrationsMap"))[event.event_id].map((reg, index) => {
+                                                                return <tr key={index}>
+                                                                    <td>{reg.donor_id}</td>
+                                                                    <td>{reg.email}</td>
+                                                                    <td>{reg.phone_no}</td>
+                                                                    <td>{reg.blood_type}</td>
+                                                                </tr>
+                                                            })
+                                                        }
+                                                    </table>
+                                                </div>
                                             }
                                         </div>
                                     </AccordionDetails>

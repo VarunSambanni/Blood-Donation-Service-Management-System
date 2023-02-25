@@ -38,7 +38,6 @@ const MainDonor = () => {
                     <Logout />
                 </div>
             </div>
-            <hr />
             <Router>
                 <Switch>
                     <Route exact path='/mainDonor/'>

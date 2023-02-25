@@ -56,7 +56,6 @@ const MainAdmin = () => {
                     <Logout />
                 </div>
             </div>
-            <hr />
 
             <div className="loadingContainer">
                 {isLoading && <LinearProgress />}

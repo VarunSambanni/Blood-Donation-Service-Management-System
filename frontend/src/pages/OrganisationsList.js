@@ -74,7 +74,7 @@ const OrganisersList = () => {
             <div className='pageTitle'>ORGANISERS</div>
         </div>
         <div>
-            <div className="center tableContainer">
+            <div className="tableContainer">
                 <table>
                     <tr>
                         <th>Organisation Id</th>

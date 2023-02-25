@@ -43,7 +43,7 @@ const DonorsList = () => {
             <div className='pageTitle'>DONORS</div>
         </div>
         <div>
-            <div className="center tableContainer">
+            <div className="tableContainer">
                 <table>
                     <tr>
                         <th>Donor Id</th>
