@@ -11,6 +11,22 @@ const Signup = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
 
     const signupHandler = () => {
+        if (/\S+@\S+\.\S+/.test(email) === false) {
+            window.alert("Enter valid email address");
+            return;
+        }
+        if (password.length < 8) {
+            window.alert("Password must consists of 8 characters at least");
+            return;
+        }
+        if (password !== confirmPassword) {
+            window.alert("Passwords don't match");
+            return;
+        }
+        if (phoneNumber.length !== 10) {
+            window.alert("Enter valid phone number");
+            return;
+        }
         setIsLoading(true);
         fetch(`http://localhost:5000/signupDonor`, {
             method: "POST",

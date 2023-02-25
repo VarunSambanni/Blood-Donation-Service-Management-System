@@ -12,7 +12,7 @@ body {
 }
 
 .backgroundContainer {
-  min-height: 120vh;
+  min-height: 115vh;
   overflow-x: none;
   background-repeat: no-repeat;
   background: url("../public/bg.jpg") no-repeat center center;
@@ -227,9 +227,10 @@ table {
 
 .footer {
   border: 1px solid black;
-  height: 2em;
   padding: 1em;
   margin-top: 0.4em;
-  background-color: blue;
+  background-color: rgb(6, 21, 226);
+  text-align: center;
+  color: white;
   bottom: 0;
 }

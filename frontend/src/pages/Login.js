@@ -10,6 +10,14 @@ const Login = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const loginHandler = () => {
+        if (/\S+@\S+\.\S+/.test(email) === false) {
+            window.alert("Enter valid email address");
+            return;
+        }
+        if (password.length === 0) {
+            window.alert("Enter the password");
+            return;
+        }
         setIsLoading(true);
         console.log(userType);
         fetch(`http://localhost:5000/login${userType}`, {
