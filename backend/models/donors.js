@@ -13,6 +13,10 @@ module.exports = class Donor {
         return db.execute('SELECT donor_id, email, phone_no, blood_type from donors');
     }
 
+    static findById(id) {
+        return db.execute('SELECT * FROM donors WHERE donor_id = ?', [id]);
+    }
+
     static findByEmailAndPassword(email, password) {
         return db.execute('SELECT * FROM donors WHERE email = ? AND password = ? ', [email, password]);
     }

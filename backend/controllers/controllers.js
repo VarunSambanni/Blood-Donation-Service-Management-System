@@ -1,4 +1,7 @@
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
+const PDFDocument = require('pdfkit');
+const getStream = require('get-stream');
 
 const Organisation = require('../models/organisations');
 const Donor = require('../models/donors');
@@ -7,6 +10,27 @@ const Registration = require('../models/registrations');
 const Donation = require('../models/donations');
 const BloodUnit = require('../models/bloodunits');
 const Reception = require('../models/receptions');
+
+const getTime = () => {
+    let date_ob = new Date();
+    let date = ("0" + date_ob.getDate()).slice(-2);
+    let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+    let year = date_ob.getFullYear();
+    let hours = date_ob.getHours();
+    let minutes = date_ob.getMinutes();
+    let seconds = date_ob.getSeconds();
+    return [year + "-" + month + "-" + date, hours + ":" + minutes + ":" + seconds];
+}
+
+const transport = nodemailer.createTransport(
+    {
+        service: 'hotmail',
+        auth: {
+            user: process.env.TRANSPORTER_EMAIL,
+            pass: process.env.TRANSPORTER_EMAIL_PASSWORD
+        }
+    }
+);
 
 
 exports.getHome = (req, res, next) => {
@@ -263,11 +287,12 @@ exports.getOrganisersList = (req, res, next) => {
         })
 }
 
-
 //Add donor verification
+
 
 exports.postBloodDonation = (req, res, next) => {
     const donor_id = req.body.donor_id;
+    const name = req.body.name;
     const blood_type = req.body.blood_type;
     const donation = new Donation(null, blood_type, donor_id);
 
@@ -279,6 +304,68 @@ exports.postBloodDonation = (req, res, next) => {
                     const bloodUnit = new BloodUnit(null, blood_type, don_id);
                     bloodUnit.save()
                         .then(() => {
+                            Donor.findById(donor_id)
+                                .then(data => {
+
+                                    const doc = new PDFDocument();
+                                    doc.font('Helvetica').fontSize(20)
+                                    doc.text('BLOOD DONATION SERVICE MANAGEMENT SYSTEM', { align: 'center', underline: true })
+                                    doc.moveDown();
+                                    doc.moveDown();
+                                    doc.moveDown();
+                                    doc.moveDown();
+                                    doc.font('Helvetica').fontSize(14);
+                                    doc.text(`Name : ${name}`, { align: 'left' });
+                                    doc.text(`Donor ID : ${data[0][0].donor_id}`, { align: 'left' });
+                                    doc.text(`Email : ${data[0][0].email}`, { align: 'left' })
+                                    doc.text(`Blood Type : ${data[0][0].blood_type}`, { align: 'left' })
+                                    doc.text(`Date of Donation : ${getTime()[0]}`, { align: 'left' })
+                                    doc.text(`Time of Donation : ${getTime()[1]}`, { align: 'left' })
+                                    doc.moveDown();
+                                    doc.moveDown();
+                                    doc.text('Thank you for you kind gesture for voluntarily donating one unit of blood.', { align: 'center' });
+                                    doc.moveDown();
+                                    doc.moveDown();
+                                    doc.moveDown();
+                                    doc.moveDown();
+                                    doc.text('POST DONATION ADVICE', { aligh: 'left', underline: true });
+                                    doc.font('Helvetica').fontSize(12);
+                                    doc.moveDown();
+                                    doc.moveDown();
+                                    doc.list(['Do not smoke or drink alcohol for 1 hour after blood donation.',
+                                        'Drink plenty of fluids after donation. The blood that you have donated is made up in quantity (volume) in 24-26 hourse. Do not donate blood for the next 3 months for Male & 4 months for female.',
+                                        'You may remove band aid after 24 hours. If there is bleeding from the site raise the arm and apply pressure. Avoid vigorous physical exercise after blood donation for the day.',
+                                        'If you feel giddy lay down by raising your foot end',
+                                        'You may resume your routine work soon after donation. However you are cautioned that you are working in hazardous occupations like construction at a heigh or operating dizziness may occur',
+                                        'For further information, please mail us at : blooddonationservicemanagement@outlook.com or call us at : 080-2313-4121'
+                                    ])
+                                    doc.end();
+                                    getStream.buffer(doc)
+                                        .then(buffer => {
+                                            var mailOptions = {
+                                                from: process.env.TRANSPORTER_EMAIL,
+                                                to: data[0][0].email,
+                                                subject: 'Successful Blood Donation',
+                                                text: `Thank you for donating blood, here's your donation report`,
+                                                html: `<h2>Thank you for donating blood, here's your donation report</h2>`,
+                                                attachments: [{
+                                                    filename: "donation-report.pdf",
+                                                    content: buffer
+                                                }]
+                                            }
+                                            transport.sendMail(mailOptions, (err, info) => {
+                                                if (err) {
+                                                    console.log("Error sending mail for blood donation");
+                                                }
+                                            })
+                                        })
+                                        .catch(err => {
+                                            console.log("Error converting pdf to stream ", err);
+                                        })
+                                })
+                                .catch(err => {
+                                    console.log("Error finding donor_id for donation ", err);
+                                })
                             return res.json({ success: true, msg: "Donation made successfully" });
                         })
                         .catch(err => {

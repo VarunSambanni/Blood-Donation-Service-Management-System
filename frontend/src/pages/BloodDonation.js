@@ -9,6 +9,7 @@ const BloodDonation = () => {
     const [email, setEmail] = useState('');
     const [phoneNo, setPhoneNo] = useState('');
     const [donorId, setDonorId] = useState('');
+    const [name, setName] = useState('');
     const [bloodType, setBloodType] = useState('O+');
 
     const donationHandler = () => {
@@ -20,7 +21,7 @@ const BloodDonation = () => {
                 'Content-Type': 'application/json',
                 'x-access-token': localStorage.getItem('token')
             },
-            body: JSON.stringify({ donor_id: donorId, blood_type: bloodType })
+            body: JSON.stringify({ donor_id: donorId, name: name, blood_type: bloodType })
         })
             .then(res => res.json())
             .then(data => {
@@ -53,6 +54,11 @@ const BloodDonation = () => {
                     <div className="inputContainer">
                         <p>Donor Id : </p>
                         <input value={donorId} onChange={(e) => setDonorId(e.target.value)} >
+                        </input>
+                    </div>
+                    <div className="inputContainer">
+                        <p>Name : </p>
+                        <input value={name} onChange={(e) => setName(e.target.value)} >
                         </input>
                     </div>
                     <div className="inputContainer">
