@@ -103,7 +103,7 @@ const BloodUnitsList = () => {
         <div className="center">
             <div className='pageTitle'>BLOOD UNITS</div>
         </div>
-        <div>
+        <div className="bloodUnitsTables">
             <div className="tableContainer">
                 <table>
                     <tr>

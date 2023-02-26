@@ -206,6 +206,11 @@ td {
   border: 1px solid black;
   text-align: center;
 }
+
+td,
+th {
+  padding: 0.3em;
+}
 table {
   margin: 0 auto;
 }
@@ -221,7 +226,7 @@ table {
   margin-top: 1em;
   border: 1px solid black;
   background-color: rgb(241, 254, 255);
-  max-height: 16em;
+  max-height: 20em;
   overflow-y: auto;
 }
 
