@@ -13,6 +13,27 @@ const BloodDonation = () => {
     const [bloodType, setBloodType] = useState('O+');
 
     const donationHandler = () => {
+        console.log("donorId => ", donorId.length);
+        if (/\S+@\S+\.\S+/.test(email) === false) {
+            window.alert("Enter valid email address");
+            return;
+        }
+
+        if (donorId.length === 0) {
+            window.alert("Enter the donor Id");
+            return;
+        }
+
+        if (name.length === 0) {
+            window.alert("Enter the name");
+            return;
+        }
+
+        if (phoneNo.length !== 10) {
+            window.alert("Enter valid phone number");
+            return;
+        }
+
         setIsLoading(true);
         fetch(`http://localhost:5000/bloodDonation`, {
             method: "POST",
@@ -35,9 +56,9 @@ const BloodDonation = () => {
                 }
             })
             .catch(err => {
+                setIsLoading(false);
                 window.alert("Error connecting to server");
             })
-        setIsLoading(false);
     }
 
 

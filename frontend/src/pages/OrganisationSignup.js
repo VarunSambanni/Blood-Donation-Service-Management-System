@@ -11,10 +11,33 @@ const OrganisationSignup = () => {
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [size, setSize] = useState();
+    const [size, setSize] = useState('');
 
 
     const signupHandler = () => {
+        if (/\S+@\S+\.\S+/.test(email) === false) {
+            window.alert("Enter valid email address");
+            return;
+        }
+
+        if (name.length === 0) {
+            window.alert("Enter valid name");
+            return;
+        }
+
+        if (password.length < 8) {
+            window.alert("Password must contain 8 characters at least");
+            return;
+        }
+        if (password !== confirmPassword) {
+            window.alert("Passwords don't match");
+            return;
+        }
+        if (size.length === 0) {
+            window.alert("Enter valid size");
+            return;
+        }
+
         setIsLoading(true);
         fetch(`http://localhost:5000/organisationSignup`, {
             method: "POST",
@@ -38,9 +61,9 @@ const OrganisationSignup = () => {
                 }
             })
             .catch(err => {
+                setIsLoading(false);
                 window.alert("Error connecting to server");
             })
-        setIsLoading(false);
     }
 
 

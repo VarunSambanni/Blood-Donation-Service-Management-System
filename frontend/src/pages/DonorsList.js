@@ -29,9 +29,9 @@ const DonorsList = () => {
                 }
             })
             .catch(err => {
+                setIsLoading(false);
                 window.alert("Error connecting to server");
             })
-        setIsLoading(false);
     }, []);
 
 

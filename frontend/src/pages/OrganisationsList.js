@@ -32,7 +32,6 @@ const OrganisersList = () => {
             .catch(err => {
                 window.alert("Error connecting to server");
             })
-        setIsLoading(false);
     }, []);
 
     useEffect(() => {
@@ -45,6 +44,7 @@ const OrganisersList = () => {
         })
             .then(res => res.json())
             .then(data => {
+                setIsLoading(false);
                 if (data.success === false) {
                     window.alert(data.msg);
                 }
@@ -60,9 +60,9 @@ const OrganisersList = () => {
                 }
             })
             .catch(err => {
+                setIsLoading(false);
                 console.log("Error connecting to server from mainDonor");
             })
-        setIsLoading(false);
     }, []);
 
 

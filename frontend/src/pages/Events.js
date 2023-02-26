@@ -17,6 +17,7 @@ const Events = () => {
         })
             .then(res => res.json())
             .then(data => {
+                setIsLoading(false);
                 if (data.success === false) {
                     window.alert(data.msg);
                 }
@@ -27,9 +28,9 @@ const Events = () => {
                 }
             })
             .catch(err => {
+                setIsLoading(false);
                 console.log("Error connecting to server from mainDonor");
             })
-        setIsLoading(false);
     }, []);
 
     useEffect(() => {
@@ -42,6 +43,7 @@ const Events = () => {
         })
             .then(res => res.json())
             .then(data => {
+                setIsLoading(false);
                 if (data.success === false) {
                     window.alert(data.msg);
                 }
@@ -51,9 +53,9 @@ const Events = () => {
                 }
             })
             .catch(err => {
+                setIsLoading(false);
                 console.log("Error connecting to server from mainDonor");
             })
-        setIsLoading(false);
     }, []);
 
     const registerHandler = (event_id) => {
@@ -79,9 +81,9 @@ const Events = () => {
                 }
             })
             .catch(err => {
+                setIsLoading(false);
                 window.alert("Error connecting to server");
             })
-        setIsLoading(false);
     }
 
 

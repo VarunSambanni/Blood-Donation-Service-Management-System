@@ -13,6 +13,22 @@ const BloodReception = () => {
     const [bloodType, setBloodType] = useState('O+');
 
     const receiveHandler = () => {
+
+        if (/\S+@\S+\.\S+/.test(email) === false) {
+            window.alert("Enter valid email address");
+            return;
+        }
+
+        if (name.length === 0) {
+            window.alert("Enter valid name");
+            return;
+        }
+
+        if (phoneNo.length !== 10) {
+            window.alert("Enter valid phone number");
+            return;
+        }
+
         setIsLoading(true);
         fetch(`http://localhost:5000/bloodReception`, {
             method: "POST",
@@ -35,9 +51,9 @@ const BloodReception = () => {
                 }
             })
             .catch(err => {
+                setIsLoading(false);
                 window.alert("Error connecting to server");
             })
-        setIsLoading(false);
     }
 
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import '../index.css';
-import { Link } from "react-router-dom";
+import { LinearProgress } from "@mui/material";
 
 const Login = () => {
 
@@ -19,7 +19,6 @@ const Login = () => {
             return;
         }
         setIsLoading(true);
-        console.log(userType);
         fetch(`http://localhost:5000/login${userType}`, {
             method: "POST",
             headers: {
@@ -46,15 +45,17 @@ const Login = () => {
                 }
             })
             .catch(err => {
+                setIsLoading(false);
                 window.alert("Error connecting to server");
             })
-        setIsLoading(false);
     }
 
     return <>
         <div className="loginContainer">
-            {isLoading && <div>Loading...</div>}
             <div className="login">
+                <div className="loadingContainer">
+                    {isLoading && <LinearProgress />}
+                </div>
                 <div className="inputContainer">
                     <p>Email : </p>
                     <input value={email} onChange={(e) => setEmail(e.target.value)} >

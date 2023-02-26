@@ -46,6 +46,7 @@ const MainOrganisation = () => {
     }, []);
 
     useEffect(() => {
+        setIsLoading(true);
         fetch('http://localhost:5000/getAllEventsByOrganisation', {
             method: "POST",
             headers: {
@@ -57,6 +58,7 @@ const MainOrganisation = () => {
         })
             .then(res => res.json())
             .then(data => {
+                setIsLoading(false);
                 if (data.success === false) {
                     window.alert(data.msg);
                 }
@@ -65,6 +67,7 @@ const MainOrganisation = () => {
                 setEvents(data.data);
             })
             .catch(err => {
+                setIsLoading(false);
                 console.log("Error connecting to server from mainOrganisation");
             })
     }, []);

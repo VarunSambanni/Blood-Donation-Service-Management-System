@@ -380,9 +380,9 @@ exports.postBloodDonation = (req, res, next) => {
                                     doc.list(['Do not smoke or drink alcohol for 1 hour after blood donation.',
                                         'Drink plenty of fluids after donation. The blood that you have donated is made up in quantity (volume) in 24-26 hourse. Do not donate blood for the next 3 months for Male & 4 months for female.',
                                         'You may remove band aid after 24 hours. If there is bleeding from the site raise the arm and apply pressure. Avoid vigorous physical exercise after blood donation for the day.',
-                                        'If you feel giddy lay down by raising your foot end',
-                                        'You may resume your routine work soon after donation. However you are cautioned that you are working in hazardous occupations like construction at a heigh or operating dizziness may occur',
-                                        'For further information, please mail us at : blooddonationservicemanagement@outlook.com or call us at : 080-2313-4121'
+                                        'If you feel giddy lay down by raising your foot end.',
+                                        'You may resume your routine work soon after donation. However you are cautioned that you are working in hazardous occupations like construction at a heigh or operating dizziness may occur.',
+                                        'For further information, please mail us at : blooddonationservicemanagement@outlook.com or call us at : 080-2313-4121.'
                                     ])
                                     doc.end();
                                     getStream.buffer(doc)

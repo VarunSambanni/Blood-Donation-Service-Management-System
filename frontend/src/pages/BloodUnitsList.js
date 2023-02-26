@@ -47,7 +47,6 @@ const BloodUnitsList = () => {
             .then(data => {
                 setIsLoading(false);
                 if (data.success === true) {
-                    console.log(data.data);
                     let temp = [0, 0, 0, 0, 0, 0, 0, 0];
                     localStorage.setItem("O+", 0);
                     localStorage.setItem("O-", 0);
@@ -87,14 +86,13 @@ const BloodUnitsList = () => {
                     setBloodUnitsList(data.data);
                 }
                 else {
-
                     window.alert(data.msg);
                 }
             })
             .catch(err => {
+                setIsLoading(false);
                 window.alert("Error connecting to server " + err);
             })
-        setIsLoading(false);
     }, []);
 
 

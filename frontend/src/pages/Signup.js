@@ -19,7 +19,7 @@ const Signup = () => {
             return;
         }
         if (password.length < 8) {
-            window.alert("Password must consists of 8 characters at least");
+            window.alert("Password must contain 8 characters at least");
             return;
         }
         if (password !== confirmPassword) {
@@ -47,12 +47,12 @@ const Signup = () => {
                     window.alert(data.msg);
                 }
                 else {
-                    setIsLoading(false);
                     console.log("Error signing up");
                     window.alert(data.msg);
                 }
             })
             .catch(err => {
+                setIsLoading(false);
                 window.alert("Error connecting to server");
             })
     }
@@ -97,6 +97,7 @@ const Signup = () => {
                 }
             })
             .catch(err => {
+                setIsLoading(false);
                 window.alert("Error connecting to server");
             })
     }

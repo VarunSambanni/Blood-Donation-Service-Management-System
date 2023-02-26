@@ -9,6 +9,22 @@ const AddEvents = () => {
     const [venue, setVenue] = useState('');
 
     const addEventHandler = () => {
+
+        if (description.length < 10) {
+            window.alert("Description must contain 10 characters at least");
+            return;
+        }
+
+        if (time.length !== 18) {
+            window.alert("Enter the time in the required format");
+            return;
+        }
+
+        if (venue.length < 10) {
+            window.alert("Venue must contain 10 characters at least");
+            return;
+        }
+
         setIsLoading(true);
         fetch(`http://localhost:5000/addEvent`, {
             method: "POST",
@@ -31,9 +47,9 @@ const AddEvents = () => {
                 }
             })
             .catch(err => {
+                setIsLoading(false);
                 window.alert("Error connecting to server");
             })
-        setIsLoading(false);
     }
 
 
@@ -54,7 +70,7 @@ const AddEvents = () => {
                     </div>
                     <div className="inputContainer">
                         <p>Time : </p>
-                        <input value={time} onChange={(e) => setTime(e.target.value)}>
+                        <input placeholder="HH:MM AM/PM, DD-MM-YY" value={time} onChange={(e) => setTime(e.target.value)}>
                         </input>
                     </div>
                     <div className="inputContainer">
